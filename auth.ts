@@ -1,5 +1,5 @@
 import NextAuth, { type DefaultSession } from 'next-auth'
-import GitHub from 'next-auth/providers/github'
+import AuthentikProvider from 'next-auth/providers/authentik'
 
 declare module 'next-auth' {
   interface Session {
@@ -15,9 +15,16 @@ export const {
   auth,
   CSRF_experimental // will be removed in future
 } = NextAuth({
-  providers: [GitHub],
+  providers: [
+    AuthentikProvider({
+      clientId: process.env.AUTHENTIK_CLIENT_ID,
+      clientSecret: process.env.AUTHENTIK_CLIENT_SECRET,
+      issuer: process.env.AUTHENTIK_ISSUER
+    })
+  ],
   callbacks: {
     jwt({ token, profile }) {
+      token.id = token.sub
       if (profile) {
         token.id = profile.id
         token.image = profile.avatar_url || profile.picture
