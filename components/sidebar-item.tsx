@@ -45,7 +45,7 @@ export function SidebarItem({ chat, children }: SidebarItemProps) {
         href={chat.path}
         className={cn(
           buttonVariants({ variant: 'ghost' }),
-          'group w-full pl-8 pr-16',
+          'group w-full pl-8 pr-4',
           isActive && 'bg-accent'
         )}
       >
