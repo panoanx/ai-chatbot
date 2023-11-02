@@ -12,7 +12,7 @@ export interface SidebarProps {
 
 export function MainNav({ children }: SidebarProps) {
   return (
-    <div className="items-center hidden md:flex">
+    <div className="hidden items-center md:flex">
       <Button variant="ghost" className="-ml-2 h-9 w-9 p-0">
         <IconSidebar className="h-6 w-6" />
         <span className="sr-only">Toggle Sidebar</span>
