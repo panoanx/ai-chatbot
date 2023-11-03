@@ -25,7 +25,7 @@ export function SidebarItem({ chat, children }: SidebarItemProps) {
   if (!chat?.id) return null
 
   return (
-    <div className="relative">
+    <div className="relative h-8">
       <div className="absolute left-2 top-1 flex h-6 w-6 items-center justify-center">
         {chat.sharePath ? (
           <Tooltip delayDuration={1000}>
@@ -45,7 +45,7 @@ export function SidebarItem({ chat, children }: SidebarItemProps) {
         href={chat.path}
         className={cn(
           buttonVariants({ variant: 'ghost' }),
-          'group w-full pl-8 pr-4',
+          'group w-full px-8 transition-colors hover:bg-zinc-200/40 dark:hover:bg-zinc-300/10 bg-zinc-200 pr-16 font-semibold dark:bg-zinc-800',
           isActive && 'bg-accent'
         )}
       >

@@ -1,5 +1,3 @@
-'use client'
-
 import * as React from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -17,16 +15,7 @@ export interface SidebarProps {
   children?: React.ReactNode
 }
 
-export function SidebarNav({ children }: SidebarProps) {
-  return (
-    <>
-      <MobileNav>{children}</MobileNav>
-    </>
-  )
-}
-
-
-function MobileNav({ children }: SidebarProps) {
+export function MobileNav({ children }: SidebarProps) {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -45,16 +34,3 @@ function MobileNav({ children }: SidebarProps) {
   )
 }
 
-export function MainNav({ children }: SidebarProps) {
-  return (
-    <div className="mr-4 hidden md:flex">
-      <Link href="/" className="mr-6 flex items-center space-x-2">
-        {/* <IconSidebar className="h-6 w-6" /> */}
-        <span className="hidden font-bold sm:inline-block">Chat History</span>
-      </Link>
-      <nav className="flex items-center space-x-6 text-sm font-medium">
-        {children}
-      </nav>
-    </div>
-  )
-}

@@ -1,28 +1,45 @@
-'use client'
-
 import * as React from 'react'
 
 import { Button } from '@/components/ui/button'
 
 import { IconSidebar } from '@/components/ui/icons'
+import { Skeleton } from './ui/skeleton'
+import { SidebarFooter } from './sidebar-footer'
+import { ThemeToggle } from './theme-toggle'
+import { ClearHistory } from './clear-history'
+import { SidebarList } from '@/components/sidebar-list'
+
+import { clearChats } from '@/app/actions'
+import { auth } from '@/auth'
 
 export interface SidebarProps {
   children?: React.ReactNode
 }
 
-export function MainNav({ children }: SidebarProps) {
+export async function MainNav({ children }: SidebarProps) {
+  const session = await auth()
   return (
-    <div className="hidden items-center md:flex">
-      <Button variant="ghost" className="-ml-2 h-9 w-9 p-0">
-        <IconSidebar className="h-6 w-6" />
-        <span className="sr-only">Toggle Sidebar</span>
-      </Button>
-
-      <div className="inset-y-0 flex h-auto w-[300px] flex-col p-0">
-        <div className="p-4">
-          <div className="text-sm">Chat History</div>
+    <div className="hidden md:w-72 lg:w-[22rem] pt-8 pl-3 md:block flex-grow-0">
+      <div className="h-full flex flex-col">
+        <div className="flex-grow">
+          <React.Suspense
+            fallback={
+              <div className="p-4 space-y-4">
+                <Skeleton className="h-4 w-[200px]" />
+                <Skeleton className="h-4 w-[160px]" />
+                <Skeleton className="h-4 w-[160px]" />
+                <Skeleton className="h-4 w-[160px]" />
+              </div>
+            }
+          >
+            {/* @ts-ignore */}
+            <SidebarList userId={session?.user?.id} />
+          </React.Suspense>
         </div>
-        {children}
+        <SidebarFooter className="">
+          <ThemeToggle />
+          <ClearHistory clearChats={clearChats} />
+        </SidebarFooter>
       </div>
     </div>
   )

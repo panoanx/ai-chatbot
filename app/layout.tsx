@@ -1,11 +1,6 @@
 import { Metadata } from 'next'
 
 import { Toaster } from 'react-hot-toast'
-import { SidebarList } from '@/components/sidebar-list'
-import { SidebarFooter } from '@/components/sidebar-footer'
-import { ThemeToggle } from '@/components/theme-toggle'
-import { ClearHistory } from '@/components/clear-history'
-import { clearChats } from './actions'
 
 import '@/app/globals.css'
 import { fontMono, fontSans } from '@/lib/fonts'
@@ -17,6 +12,7 @@ import React from 'react'
 import { auth } from '@/auth'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Skeleton } from '@/components/ui/skeleton'
+import { MainNav } from '@/components/main-nav'
 
 export const metadata: Metadata = {
   title: {
@@ -42,9 +38,6 @@ interface RootLayoutProps {
 // import { useState } from 'react';
 
 export default async function RootLayout({ children }: RootLayoutProps) {
-  const session = await auth()
-  // const [showSidebar, setShowSidebar] = useState(false);
-
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
@@ -61,31 +54,10 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             {/* @ts-ignore */}
             <Header />
             <div className="flex flex-row flex-1">
-              <div className="hidden md:w-72 lg:w-[22rem] py-8 pl-3 md:block flex-grow-0">
-                <div className="h-full">
-                  <div className="">
-                    <React.Suspense
-                      fallback={
-                        <div className="p-4 space-y-4">
-                          <Skeleton className="h-4 w-[200px]" />
-                          <Skeleton className="h-4 w-[160px]" />
-                          <Skeleton className="h-4 w-[160px]" />
-                          <Skeleton className="h-4 w-[160px]" />
-                        </div>
-                      }
-                    >
-                      {/* @ts-ignore */}
-                      <SidebarList userId={session?.user?.id} />
-                    </React.Suspense>
-                  </div>
-                  <SidebarFooter className="fixed bottom-0 flex-shrink-0 ">
-                    <ThemeToggle />
-                    <ClearHistory clearChats={clearChats} />
-                  </SidebarFooter>
-                </div>
-              </div>
+              {/* @ts-ignore */}
+              <MainNav />
 
-              <main className="container flex flex-col flex-1 bg-muted/50">
+              <main className="flex flex-col flex-1 bg-muted/50">
                 {children}
               </main>
             </div>
