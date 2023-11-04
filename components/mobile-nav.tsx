@@ -19,7 +19,7 @@ export function MobileNav({ children }: SidebarProps) {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="ghost" className="-ml-2 h-9 w-9 p-0 md:hidden">
+        <Button variant="ghost" className="-ml-2 h-9 w-9 p-0 lg:hidden">
           <IconSidebar className="h-6 w-6" />
           <span className="sr-only">Toggle Sidebar</span>
         </Button>

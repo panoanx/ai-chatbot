@@ -19,34 +19,37 @@ import { ClearHistory } from '@/components/clear-history'
 import { UserMenu } from '@/components/user-menu'
 import { LoginButton } from '@/components/login-button'
 import Navbar from './navbar'
+import { SidebarToggleButton } from './sidebar-toggle'
 
 export async function Header() {
   const session = await auth()
+
   return (
     <header className="sticky top-0 z-50 flex h-16 w-full shrink-0 items-center justify-between border-b bg-gradient-to-b from-background/10 via-background/50 to-background/80 px-4 backdrop-blur-xl">
-      <MobileNav>
-        {/* @ts-ignore */}
-        <Navbar />
-      </MobileNav>
       <div className="flex items-center">
         {session?.user ? (
-          <></>
+          <>
+            <MobileNav>
+              {/* @ts-ignore */}
+              <Navbar />
+            </MobileNav>
+            <SidebarToggleButton />
+          </>
         ) : (
           <Link href="/" target="_blank" rel="nofollow">
             <IconNextChat className="w-6 h-6 mr-2 dark:hidden" inverted />
             <IconNextChat className="hidden w-6 h-6 mr-2 dark:block" />
           </Link>
         )}
-        <div className="flex items-center">
-          <IconSeparator className="w-6 h-6 text-muted-foreground/50" />
-          {session?.user ? (
-            <UserMenu user={session.user} />
-          ) : (
-            <Button variant="link" asChild className="-ml-2">
-              <Link href="/sign-in?callbackUrl=/">Login</Link>
-            </Button>
-          )}
-        </div>
+
+        <IconSeparator className="w-6 h-6 text-muted-foreground/50" />
+        {session?.user ? (
+          <UserMenu user={session.user} />
+        ) : (
+          <Button variant="link" asChild className="-ml-2">
+            <Link href="/sign-in?callbackUrl=/">Login</Link>
+          </Button>
+        )}
       </div>
       {/* <div className="flex items-center justify-end space-x-2">
         <a

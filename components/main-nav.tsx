@@ -2,7 +2,7 @@ import * as React from 'react'
 
 import { Button } from '@/components/ui/button'
 
-import { IconSidebar } from '@/components/ui/icons'
+import { IconNextChat, IconSidebar } from '@/components/ui/icons'
 import { Skeleton } from './ui/skeleton'
 import { SidebarFooter } from './sidebar-footer'
 import { ThemeToggle } from './theme-toggle'
@@ -11,16 +11,16 @@ import { SidebarList } from '@/components/sidebar-list'
 
 import { clearChats } from '@/app/actions'
 import { auth } from '@/auth'
+import { MainSidebar } from './sidebar-toggle'
 
-export interface SidebarProps {
-  children?: React.ReactNode
-}
-
-export async function MainNav({ children }: SidebarProps) {
+export async function MainNav() {
   const session = await auth()
   return (
-    <div className="hidden md:w-72 lg:w-[22rem] pt-8 pl-3 md:block flex-grow-0">
+    <MainSidebar>
       <div className="h-full flex flex-col">
+        <div className="flex items-center justify-between p-4">
+          <h4 className="text-sm font-medium">Chat History</h4>
+        </div>
         <div className="flex-grow">
           <React.Suspense
             fallback={
@@ -41,6 +41,6 @@ export async function MainNav({ children }: SidebarProps) {
           <ClearHistory clearChats={clearChats} />
         </SidebarFooter>
       </div>
-    </div>
+    </MainSidebar>
   )
 }

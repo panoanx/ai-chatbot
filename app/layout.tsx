@@ -13,6 +13,7 @@ import { auth } from '@/auth'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Skeleton } from '@/components/ui/skeleton'
 import { MainNav } from '@/components/main-nav'
+import MainPanel from '@/components/main-panel'
 
 export const metadata: Metadata = {
   title: {
@@ -35,8 +36,6 @@ interface RootLayoutProps {
   children: React.ReactNode
 }
 
-// import { useState } from 'react';
-
 export default async function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
@@ -54,11 +53,12 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             {/* @ts-ignore */}
             <Header />
             <div className="flex flex-row flex-1">
-              {/* @ts-ignore */}
-              <MainNav />
-
               <main className="flex flex-col flex-1 bg-muted/50">
-                {children}
+                <div className="relative flex h-[calc(100vh_-_theme(spacing.16))] overflow-hidden">
+                  {/* @ts-ignore */}
+                  <MainNav />
+                  <MainPanel>{children}</MainPanel>
+                </div>
               </main>
             </div>
           </div>
