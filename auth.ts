@@ -31,6 +31,11 @@ export const {
       // }
       return token
     },
+    session({ session, token }) {
+      session.user.id = token.sub ?? ''
+      // session.user.image = token.image
+      return session
+    },
     // authorized({ auth }) {
     //   return !!auth?.user // this ensures there is a logged in user for -every- request
     // }
