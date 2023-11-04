@@ -51,17 +51,17 @@ export async function Header() {
           </Button>
         )}
       </div>
-      {/* <div className="flex items-center justify-end space-x-2">
+      <div className="flex items-center justify-end space-x-2">
         <a
           target="_blank"
-          href="https://github.com/vercel/nextjs-ai-chatbot/"
+          href="https://github.com/panoanx/ai-chatbot/"
           rel="noopener noreferrer"
           className={cn(buttonVariants({ variant: 'outline' }))}
         >
           <IconGitHub />
           <span className="hidden ml-2 md:flex">GitHub</span>
         </a>
-        <a
+        {/* <a
           href="https://github.com/vercel/nextjs-ai-chatbot/"
           target="_blank"
           className={cn(buttonVariants())}
@@ -69,8 +69,8 @@ export async function Header() {
           <IconVercel className="mr-2" />
           <span className="hidden sm:block">Deploy to Vercel</span>
           <span className="sm:hidden">Deploy</span>
-        </a>
-      </div> */}
+        </a> */}
+      </div>
     </header>
   )
 }

@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/sheet'
 import { IconSidebar } from '@/components/ui/icons'
 import Link from 'next/link'
+import NewChatButton from './new-chat-button'
 
 export interface SidebarProps {
   children?: React.ReactNode
@@ -28,9 +29,11 @@ export function MobileNav({ children }: SidebarProps) {
         <SheetHeader className="p-4">
           <SheetTitle className="text-sm">Chat History</SheetTitle>
         </SheetHeader>
+        <div className="mb-2 px-2">
+          <NewChatButton />
+        </div>
         {children}
       </SheetContent>
     </Sheet>
   )
 }
-
