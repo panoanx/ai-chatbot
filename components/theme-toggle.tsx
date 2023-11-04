@@ -20,11 +20,8 @@ export function ThemeToggle() {
         })
       }}
     >
-      {!theme ? null : theme === 'dark' ? (
-        <IconMoon className="transition-all" />
-      ) : (
-        <IconSun className="transition-all" />
-      )}
+      <IconMoon className="transition-all hidden dark:block" />
+      <IconSun key="sun-icon" className="transition-all dark:hidden" />
       <span className="sr-only">Toggle theme</span>
     </Button>
   )

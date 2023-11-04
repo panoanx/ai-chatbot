@@ -13,27 +13,27 @@ declare module 'next-auth' {
 export const {
   handlers: { GET, POST },
   auth,
-  CSRF_experimental // will be removed in future
+  // CSRF_experimental // will be removed in future
 } = NextAuth({
   providers: [
     AuthentikProvider({
-      clientId: process.env.AUTHENTIK_CLIENT_ID,
-      clientSecret: process.env.AUTHENTIK_CLIENT_SECRET,
+      clientId: process.env.AUTHENTIK_CLIENT_ID || '',
+      clientSecret: process.env.AUTHENTIK_CLIENT_SECRET || '',
       issuer: process.env.AUTHENTIK_ISSUER
     })
   ],
   callbacks: {
     jwt({ token, profile }) {
-      token.id = token.sub
-      if (profile) {
-        token.id = profile.id
-        token.image = profile.avatar_url || profile.picture
-      }
+      // error after update next-auth
+      // if (profile) {
+      //   token.id = profile.id
+      //   token.image = profile.avatar_url || profile.picture
+      // }
       return token
     },
-    authorized({ auth }) {
-      return !!auth?.user // this ensures there is a logged in user for -every- request
-    }
+    // authorized({ auth }) {
+    //   return !!auth?.user // this ensures there is a logged in user for -every- request
+    // }
   },
   pages: {
     signIn: '/sign-in' // overrides the next-auth default signin page https://authjs.dev/guides/basics/pages
