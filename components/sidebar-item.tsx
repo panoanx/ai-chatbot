@@ -46,7 +46,7 @@ export function SidebarItem({ chat, children }: SidebarItemProps) {
         className={cn(
           buttonVariants({ variant: 'ghost' }),
           'group w-full py-0 px-8 h-8 transition-colors hover:bg-zinc-200/40 dark:hover:bg-zinc-300/10 pr-16',
-          isActive && 'bg-accent'
+          isActive &&  'bg-zinc-200 pr-16 font-semibold dark:bg-zinc-800'
         )}
       >
         <div
