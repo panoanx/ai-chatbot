@@ -45,7 +45,7 @@ export function SidebarItem({ chat, children }: SidebarItemProps) {
         href={chat.path}
         className={cn(
           buttonVariants({ variant: 'ghost' }),
-          'group w-full px-8 transition-colors hover:bg-zinc-200/40 dark:hover:bg-zinc-300/10 bg-zinc-200 pr-16 font-medium dark:bg-zinc-800',
+          'group w-full px-8 py-0 h-8 transition-colors hover:bg-zinc-200/40 dark:hover:bg-zinc-300/10 pr-16',
           isActive && 'bg-accent'
         )}
       >

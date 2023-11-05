@@ -39,14 +39,14 @@ export function ChatPanel({
     >
       <ButtonScrollToBottom />
       <div className="mx-auto sm:max-w-3xl sm:px-4">
-        <div className="flex h-10 items-center justify-center">
+        <div className="flex h-12 items-center justify-center">
           {isLoading ? (
             <Button
               variant="outline"
               onClick={() => stop()}
-              className="bg-background"
+              className="bg-background h-8 py-2 shadow"
             >
-              <IconStop className="mr-2" />
+              <IconStop className="mr-2 h-8 py-2" />
               Stop generating
             </Button>
           ) : (
@@ -55,7 +55,7 @@ export function ChatPanel({
                 <Button
                   variant="outline"
                   onClick={() => reload()}
-                  className="bg-background"
+                  className="bg-background h-8 py-2 shadow"
                 >
                   <IconRefresh className="mr-2" />
                   Regenerate response
@@ -63,7 +63,7 @@ export function ChatPanel({
                 <Button
                   variant="outline"
                   onClick={() => reload()}
-                  className="bg-background"
+                  className="bg-background h-8 py-2 shadow"
                 >
                   <IconShare className="mr-2" />
                   Share

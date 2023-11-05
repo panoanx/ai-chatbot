@@ -22,7 +22,7 @@ export async function MainNav() {
           <div className="mb-2 px-2">
             <NewChatButton />
           </div>
-          <div className="flex-grow">
+          <div className="flex flex-1 flex-col overflow-hidden">
             <React.Suspense
               fallback={
                 <div className="p-4 space-y-4">
