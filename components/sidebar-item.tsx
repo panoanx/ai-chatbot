@@ -45,15 +45,15 @@ export function SidebarItem({ chat, children }: SidebarItemProps) {
         href={chat.path}
         className={cn(
           buttonVariants({ variant: 'ghost' }),
-          'group w-full px-8 py-0 h-8 transition-colors hover:bg-zinc-200/40 dark:hover:bg-zinc-300/10 pr-16',
+          'group w-full py-0 px-8 h-8 transition-colors hover:bg-zinc-200/40 dark:hover:bg-zinc-300/10 pr-16',
           isActive && 'bg-accent'
         )}
       >
         <div
-          className="relative max-h-5 select-none overflow-hidden text-ellipsis break-all"
+          className="relative max-h-5 flex-1 select-none overflow-hidden text-ellipsis break-all"
           title={chat.title}
         >
-          <span className="whitespace-nowrap">{chat.title}</span>
+          <span className="text-left whitespace-nowrap">{chat.title}</span>
         </div>
       </Link>
       {isActive && <div className="absolute right-2 top-1">{children}</div>}
