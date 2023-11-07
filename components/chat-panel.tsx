@@ -6,8 +6,7 @@ import { ButtonScrollToBottom } from '@/components/button-scroll-to-bottom'
 import { IconRefresh, IconShare, IconStop } from '@/components/ui/icons'
 import { FooterText } from '@/components/footer'
 import { cn } from '@/lib/utils'
-import { useContext } from 'react'
-
+import { ChatRequestOptions } from 'ai'
 export interface ChatPanelProps
   extends Pick<
     UseChatHelpers,
@@ -19,8 +18,8 @@ export interface ChatPanelProps
     | 'input'
     | 'setInput'
   > {
-  id?: string,
-  model?: string,
+  id?: string
+  model?: string
 }
 
 export function ChatPanel({
@@ -32,8 +31,16 @@ export function ChatPanel({
   input,
   setInput,
   messages,
-  model,
+  model
 }: ChatPanelProps) {
+  const chatOptions: ChatRequestOptions = {
+    options: {
+      body: {
+        model: model
+      }
+    }
+  }
+
   return (
     <div
       className={cn(
@@ -57,15 +64,15 @@ export function ChatPanel({
               <div className="space-x-2">
                 <Button
                   variant="outline"
-                  onClick={() => reload()}
+                  onClick={() => reload(chatOptions)}
                   className="bg-background h-8 py-2 shadow"
                 >
                   <IconRefresh className="mr-2" />
-                  Regenerate response
+                  Regenerate
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() => reload()}
+                  onClick={() => reload(chatOptions)}
                   className="bg-background h-8 py-2 shadow"
                 >
                   <IconShare className="mr-2" />
@@ -78,17 +85,14 @@ export function ChatPanel({
         <div className="space-y-4 border-t bg-background px-4 py-2 shadow-lg sm:rounded-t-xl sm:border md:py-4">
           <PromptForm
             onSubmit={async value => {
-              await append({
-                id,
-                content: value,
-                role: 'user',
-              }, {
-                options: {
-                  body: {
-                    model: model,
-                  }
-                }
-              })
+              await append(
+                {
+                  id,
+                  content: value,
+                  role: 'user'
+                },
+                chatOptions
+              )
             }}
             input={input}
             setInput={setInput}
