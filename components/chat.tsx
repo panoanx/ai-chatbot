@@ -37,6 +37,7 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
     'ai-token',
     null
   )
+  const [model, setModel] = useLocalStorage('model', 'gpt-3.5-turbo-16k')
   const [previewTokenDialog, setPreviewTokenDialog] = useState(IS_PREVIEW)
   const [previewTokenInput, setPreviewTokenInput] = useState(previewToken ?? '')
   const { messages, append, reload, stop, isLoading, input, setInput } =
@@ -63,7 +64,7 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
     <>
       <div className={cn('pb-[200px] pt-4 md:pt-10 flex-1', className)}>
         <div className="h-8 flex items-center mx-auto -translate-y-4 my-4">
-          <ModelSelector />
+          <ModelSelector model={model} setModel={setModel}/>
         </div>
         <div>
           {messages.length ? (
@@ -85,6 +86,7 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
         messages={messages}
         input={input}
         setInput={setInput}
+        model={model}
       />
 
       <Dialog open={previewTokenDialog} onOpenChange={setPreviewTokenDialog}>

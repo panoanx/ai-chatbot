@@ -6,17 +6,12 @@ import { ThemeProviderProps } from 'next-themes/dist/types'
 
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { SidebarContextProvider } from './sidebar-toggle'
-import { ModelSelectionProvider } from './model-selector'
 
 export function Providers({ children, ...props }: ThemeProviderProps) {
   return (
     <NextThemesProvider {...props}>
       <TooltipProvider>
-        <SidebarContextProvider>
-          <ModelSelectionProvider>
-            {children}
-          </ModelSelectionProvider>
-        </SidebarContextProvider>
+        <SidebarContextProvider>{children}</SidebarContextProvider>
       </TooltipProvider>
     </NextThemesProvider>
   )

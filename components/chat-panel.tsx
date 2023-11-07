@@ -7,7 +7,6 @@ import { IconRefresh, IconShare, IconStop } from '@/components/ui/icons'
 import { FooterText } from '@/components/footer'
 import { cn } from '@/lib/utils'
 import { useContext } from 'react'
-import { ModelSelectionContext } from './model-selector'
 
 export interface ChatPanelProps
   extends Pick<
@@ -20,7 +19,8 @@ export interface ChatPanelProps
     | 'input'
     | 'setInput'
   > {
-  id?: string
+  id?: string,
+  model?: string,
 }
 
 export function ChatPanel({
@@ -31,9 +31,9 @@ export function ChatPanel({
   reload,
   input,
   setInput,
-  messages
+  messages,
+  model,
 }: ChatPanelProps) {
-  const {model} = useContext(ModelSelectionContext)
   return (
     <div
       className={cn(

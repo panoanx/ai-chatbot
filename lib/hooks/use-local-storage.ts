@@ -1,10 +1,23 @@
+import { init } from 'next/dist/compiled/webpack/webpack'
 import { useEffect, useState } from 'react'
 
 export const useLocalStorage = <T>(
   key: string,
   initialValue: T
 ): [T, (value: T) => void] => {
-  const [storedValue, setStoredValue] = useState(initialValue)
+  const [storedValue, setStoredValue] = useState(() => {
+    let currentValue
+
+    try {
+      currentValue = JSON.parse(
+        localStorage.getItem(key) || String(initialValue)
+      )
+    } catch (error) {
+      currentValue = initialValue
+    }
+
+    return currentValue
+  })
 
   useEffect(() => {
     // Retrieve from localStorage

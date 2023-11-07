@@ -14,8 +14,6 @@ import React, { useContext } from 'react'
 // gpt-3.5-turbo-1106	160,000 TPM	5,000 RPM
 // gpt-3.5-turbo-16k	180,000 TPM	5,000 RPM
 // gpt-3.5-turbo-16k-0613	180,000 TPM	5,000 RPM
-// gpt-3.5-turbo-instruct	250,000 TPM	3,000 RPM
-// gpt-3.5-turbo-instruct-0914	250,000 TPM	3,000 RPM
 // gpt-4	80,000 TPM	5,000 RPM
 // gpt-4-0314	80,000 TPM	5,000 RPM
 // gpt-4-0613	80,000 TPM	5,000 RPM
@@ -30,34 +28,16 @@ const modelOptions = [
   { label: 'GPT-4 Vision', value: 'gpt-4-vision-preview' },
 ]
 
-export const ModelSelectionContext = React.createContext({
-  model: 'GPT-4',
-  setModelParams: (model: string) => {}
-})
 
-export function ModelSelectionProvider({
-  children
-}: {
-  children: React.ReactNode
-}) {
-  const [model, setModelSelection] = React.useState(modelOptions[0].value)
 
-  const setModelParams = (model: string) => {
-    setModelSelection(model)
-  }
-
-  return (
-    <ModelSelectionContext.Provider value={{ model: model, setModelParams }}>
-      {children}
-    </ModelSelectionContext.Provider>
-  )
+interface ModelSelectorProps {
+  model:string,
+  setModel: (value: string) => void,
 }
-
-export default function ModelSelector() {
-  const { model, setModelParams } = useContext(ModelSelectionContext)
+export default function ModelSelector({model, setModel}: ModelSelectorProps) {
 
   return (
-    <Select defaultValue={model} onValueChange={setModelParams}>
+    <Select defaultValue={model} onValueChange={setModel}>
       <SelectTrigger className="w-[200px] mx-auto shadow">
         <SelectValue placeholder="Select model" />
       </SelectTrigger>
