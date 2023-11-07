@@ -32,12 +32,15 @@
     "class-variance-authority": "^0.4.0",
     "clsx": "^1.2.1",
     "focus-trap-react": "^10.2.3",
+    "http": "0.0.1-security",
+    "https-proxy-agent": "^7.0.2",
     "lucide-react": "^0.291.0",
     "nanoid": "^4.0.2",
+    "net": "^1.0.2",
     "next": "14.0.1",
     "next-auth": "5.0.0-beta.3",
     "next-themes": "^0.2.1",
-    "openai-edge": "^1.2.2",
+    "openai": "^4.16.1",
     "pnpm": "^8.10.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -47,7 +50,8 @@
     "react-syntax-highlighter": "^15.5.0",
     "react-textarea-autosize": "^8.5.3",
     "remark-gfm": "^3.0.1",
-    "remark-math": "^5.1.1"
+    "remark-math": "^5.1.1",
+    "tls": "^0.0.1"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.10",

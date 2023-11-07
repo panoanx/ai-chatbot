@@ -1,21 +1,26 @@
+'use server'
+
 import { kv } from '@vercel/kv'
 import { OpenAIStream, StreamingTextResponse } from 'ai'
-import { Configuration, OpenAIApi } from 'openai-edge'
+import OpenAI from 'openai'
+
+import { HttpsProxyAgent } from 'https-proxy-agent'
 
 import { auth } from '@/auth'
 import { nanoid } from '@/lib/utils'
 
-export const runtime = 'edge'
+// export const runtime = 'edge'
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+  httpAgent: process.env.PROXY_URL
+    ? new HttpsProxyAgent(process.env.PROXY_URL)
+    : undefined
 })
-
-const openai = new OpenAIApi(configuration)
 
 export async function POST(req: Request) {
   const json = await req.json()
-  const { messages, previewToken } = json
+  const { messages, previewToken, model } = json
   const session = await auth()
   const userId = session?.user.id
 
@@ -25,17 +30,17 @@ export async function POST(req: Request) {
     })
   }
 
-  if (previewToken) {
-    configuration.apiKey = previewToken
-  }
+  if (previewToken) openai.apiKey = previewToken
 
-  const res = await openai.createChatCompletion({
-    model: 'gpt-4',
+  const res = await openai.chat.completions.create({
+    model: model,
     messages,
     temperature: 0.7,
     stream: true
   })
 
+  // TODO: remove this in future
+  // @ts-ignore
   const stream = OpenAIStream(res, {
     async onCompletion(completion) {
       const title = json.messages[0].content.substring(0, 100)

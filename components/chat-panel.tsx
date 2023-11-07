@@ -6,6 +6,8 @@ import { ButtonScrollToBottom } from '@/components/button-scroll-to-bottom'
 import { IconRefresh, IconShare, IconStop } from '@/components/ui/icons'
 import { FooterText } from '@/components/footer'
 import { cn } from '@/lib/utils'
+import { useContext } from 'react'
+import { ModelSelectionContext } from './model-selector'
 
 export interface ChatPanelProps
   extends Pick<
@@ -31,6 +33,7 @@ export function ChatPanel({
   setInput,
   messages
 }: ChatPanelProps) {
+  const {model} = useContext(ModelSelectionContext)
   return (
     <div
       className={cn(
@@ -78,7 +81,13 @@ export function ChatPanel({
               await append({
                 id,
                 content: value,
-                role: 'user'
+                role: 'user',
+              }, {
+                options: {
+                  body: {
+                    model: model,
+                  }
+                }
               })
             }}
             input={input}

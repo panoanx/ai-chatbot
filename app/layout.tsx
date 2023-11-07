@@ -17,18 +17,18 @@ import MainPanel from '@/components/main-panel'
 
 export const metadata: Metadata = {
   title: {
-    default: 'Next.js AI Chatbot',
-    template: `%s - Next.js AI Chatbot`
+    default: 'AI Tools for Robotflow',
+    template: `%s - AI Tools for Robotflow`
   },
-  description: 'An AI-powered chatbot template built with Next.js and Vercel.',
+  description: 'AI Tools for Robotflow. A collection of tools for academic research and development.',
   // themeColor: [
   //   { media: '(prefers-color-scheme: light)', color: 'white' },
   //   { media: '(prefers-color-scheme: dark)', color: 'black' }
   // ],
   icons: {
     icon: '/favicon.ico',
-    shortcut: '/favicon-16x16.png',
-    apple: '/apple-touch-icon.png'
+    // shortcut: '/favicon-16x16.png',
+    // apple: '/apple-touch-icon.png'
   }
 }
 
