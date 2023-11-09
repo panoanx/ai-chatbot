@@ -3,7 +3,7 @@
 
 import { Message } from 'ai'
 import remarkGfm from 'remark-gfm'
-import remarkMath from 'remark-math'
+import remarkMath, { Options } from 'remark-math'
 
 import { cn } from '@/lib/utils'
 import { CodeBlock } from '@/components/ui/codeblock'
@@ -20,7 +20,7 @@ export interface ChatMessageProps {
   message: Message
   index: number
   editMessage?: ({ content, index }: { content: string; index: number }) => void
-  isLoading?: boolean,
+  isLoading?: boolean
   isShared?: boolean
 }
 
@@ -41,6 +41,9 @@ export function ChatMessage({
       setInput(message.content)
     }
   }, [isEditing, message])
+
+  // regex to replace \(\) and \[\] with $$ and $$
+  const parsedContent = message.content.replace(/\\\((.*?)\\\)/g, '$$ $1 $$').replace(/\\\[(.*?)\\\]/g, '\n$$$$ \n $1 \n $$$$\n');
 
   return (
     <div
@@ -113,10 +116,14 @@ export function ChatMessage({
               }
             }}
           >
-            {message.content}
+            {parsedContent}
           </MemoizedReactMarkdown>
         )}
-        <ChatMessageActions message={message} isEditing={isEditing} setIsEditing={setIsEditing} />
+        <ChatMessageActions
+          message={message}
+          isEditing={isEditing}
+          setIsEditing={setIsEditing}
+        />
       </div>
     </div>
   )
