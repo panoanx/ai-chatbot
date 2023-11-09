@@ -14,6 +14,7 @@ import React from 'react'
 import { Prompt } from 'next/font/google'
 import { PromptForm } from './prompt-form'
 import { isContext } from 'vm'
+import rehypeKatex from 'rehype-katex'
 
 export interface ChatMessageProps {
   message: Message
@@ -69,6 +70,7 @@ export function ChatMessage({
           <MemoizedReactMarkdown
             className="prose break-words dark:prose-invert prose-p:leading-relaxed prose-pre:p-0"
             remarkPlugins={[remarkGfm, remarkMath]}
+            rehypePlugins={[rehypeKatex as any]}
             components={{
               p({ children }) {
                 return <p className="mb-2 last:mb-0">{children}</p>

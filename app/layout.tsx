@@ -20,13 +20,14 @@ export const metadata: Metadata = {
     default: 'AI Tools for Robotflow',
     template: `%s - AI Tools for Robotflow`
   },
-  description: 'AI Tools for Robotflow. A collection of tools for academic research and development.',
+  description:
+    'AI Tools for Robotflow. A collection of tools for academic research and development.',
   // themeColor: [
   //   { media: '(prefers-color-scheme: light)', color: 'white' },
   //   { media: '(prefers-color-scheme: dark)', color: 'black' }
   // ],
   icons: {
-    icon: '/favicon.ico',
+    icon: '/favicon.ico'
     // shortcut: '/favicon-16x16.png',
     // apple: '/apple-touch-icon.png'
   }
@@ -39,7 +40,14 @@ interface RootLayoutProps {
 export default async function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head />
+      <head>
+        <link
+          rel="stylesheet"
+          href="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/KaTeX/0.15.2/katex.min.css"
+          crossOrigin="anonymous"
+        />
+      </head>
+
       <body
         className={cn(
           'font-sans antialiased',
