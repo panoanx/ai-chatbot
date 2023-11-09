@@ -79,10 +79,24 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
     }
   }
 
+  async function editMessage({ content = '', index = -1 }) {
+    if (index === -1) return toast.error('Error editing message')
+
+    setMessages(messages.slice(0, index))
+    return await append(
+      {
+        id,
+        content: content,
+        role: 'user'
+      },
+      chatOptions
+    )
+  }
+
   return (
     <>
-      <div className={cn('pb-[200px] pt-4 md:pt-10 flex-1', className)}>
-        <div className="h-8 flex items-center mx-auto -translate-y-4 my-4">
+      <div className={cn('flex-1 pb-[200px] pt-4 md:pt-10', className)}>
+        <div className="mx-auto my-4 flex h-8 -translate-y-4 items-center">
           <ModelSelector model={model} setModel={setModel} />
         </div>
         <div>
@@ -90,11 +104,8 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
             <>
               <ChatList
                 messages={messages}
-                setMessages={setMessages}
-                append={append}
-                id={id}
                 isLoading={isLoading}
-                chatOptions={chatOptions}
+                editMessage={editMessage}
               />
               <ChatScrollAnchor trackVisibility={isLoading} />
             </>

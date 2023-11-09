@@ -19,8 +19,9 @@ import rehypeKatex from 'rehype-katex'
 export interface ChatMessageProps {
   message: Message
   index: number
-  editMessage: ({ content, index }: { content: string; index: number }) => void
-  isLoading: boolean
+  editMessage?: ({ content, index }: { content: string; index: number }) => void
+  isLoading?: boolean,
+  isShared?: boolean
 }
 
 export function ChatMessage({
@@ -28,6 +29,7 @@ export function ChatMessage({
   index,
   editMessage,
   isLoading,
+  isShared,
   ...props
 }: ChatMessageProps) {
   const [isEditing, setIsEditing] = React.useState(false)
@@ -55,20 +57,22 @@ export function ChatMessage({
       >
         {message.role === 'user' ? <IconUser /> : <IconOpenAI />}
       </div>
-      <div className="flex-1 px-1 ml-4 space-y-2 overflow-hidden">
-        {isEditing ? (
+      <div className="ml-4 flex-1 space-y-2 overflow-hidden px-1">
+        {isEditing && !isShared && editMessage ? (
           <PromptForm
             onSubmit={async value => {
               setIsEditing(false)
-              await editMessage({ content: value, index })
+              if (editMessage) {
+                await editMessage({ content: value, index })
+              }
             }}
             input={input}
             setInput={setInput}
-            isLoading={isLoading}
+            isLoading={isLoading || false}
           />
         ) : (
           <MemoizedReactMarkdown
-            className="prose break-words dark:prose-invert prose-p:leading-relaxed prose-pre:p-0"
+            className="prose dark:prose-invert prose-p:leading-relaxed prose-pre:p-0 break-words"
             remarkPlugins={[remarkGfm, remarkMath]}
             rehypePlugins={[rehypeKatex as any]}
             components={{
@@ -79,7 +83,7 @@ export function ChatMessage({
                 if (children.length) {
                   if (children[0] == '▍') {
                     return (
-                      <span className="mt-1 cursor-default animate-pulse">
+                      <span className="mt-1 animate-pulse cursor-default">
                         ▍
                       </span>
                     )

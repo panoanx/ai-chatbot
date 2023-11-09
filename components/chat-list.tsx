@@ -5,39 +5,16 @@ import { ChatMessage } from '@/components/chat-message'
 import { UseChatHelpers } from 'ai/react/dist'
 import toast from 'react-hot-toast'
 
-export interface ChatList
-  extends Pick<
-    UseChatHelpers,
-    'append' | 'messages' | 'setMessages' | 'isLoading'
-  > {
+interface ChatListProps extends Pick<UseChatHelpers, 'messages' | 'isLoading'> {
   id?: string
-  chatOptions: ChatRequestOptions
+  chatOptions?: ChatRequestOptions
+  isShared?: boolean
+  editMessage?: ({ content, index }: { content: string; index: number }) => void
 }
 
-export function ChatList({
-  messages,
-  setMessages,
-  append,
-  id,
-  isLoading,
-  chatOptions
-}: ChatList) {
+export function ChatList({ messages, isLoading, isShared, editMessage }: ChatListProps) {
   if (!messages.length) {
     return null
-  }
-
-  async function editMessage({ content = '', index = -1 }) {
-    if (index === -1) return toast.error('Error editing message')
-
-    setMessages(messages.slice(0, index))
-    return await append(
-      {
-        id,
-        content: content,
-        role: 'user'
-      },
-      chatOptions
-    )
   }
 
   return (
@@ -49,6 +26,7 @@ export function ChatList({
             editMessage={editMessage}
             index={index}
             isLoading={isLoading}
+            isShared={isShared}
           />
           {index < messages.length - 1 && (
             <Separator className="my-4 md:my-8" />

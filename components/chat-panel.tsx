@@ -37,7 +37,7 @@ export function ChatPanel({
   return (
     <div
       className={cn(
-        'fixed inset-x-0 bottom-0 w-full bg-gradient-to-b from-muted/30 from-0% to-muted/30 to-50% animate-in duration-300 ease-in-out dark:from-background/10 dark:from-10% dark:to-background/80 peer-[[data-state=open]]:group-[]:lg:pl-[250px] peer-[[data-state=open]]:group-[]:xl:pl-[300px]'
+        'fixed inset-x-0 bottom-0 w-full bg-gradient-to-b from-muted/30 from-0% to-muted/30 to-50% duration-300 ease-in-out animate-in dark:from-background/10 dark:from-10% dark:to-background/80 peer-[[data-state=open]]:group-[]:lg:pl-[250px] peer-[[data-state=open]]:group-[]:xl:pl-[300px]'
       )}
     >
       <ButtonScrollToBottom />
@@ -47,7 +47,7 @@ export function ChatPanel({
             <Button
               variant="outline"
               onClick={() => stop()}
-              className="bg-background h-8 py-2 shadow"
+              className="h-8 bg-background py-2 shadow"
             >
               <IconStop className="mr-2 h-8 py-2" />
               Stop generating
@@ -58,7 +58,7 @@ export function ChatPanel({
                 <Button
                   variant="outline"
                   onClick={() => reload(chatOptions)}
-                  className="bg-background h-8 py-2 shadow"
+                  className="h-8 bg-background py-2 shadow"
                 >
                   <IconRefresh className="mr-2" />
                   Regenerate
@@ -66,7 +66,7 @@ export function ChatPanel({
                 <Button
                   variant="outline"
                   onClick={() => reload(chatOptions)}
-                  className="bg-background h-8 py-2 shadow"
+                  className="h-8 bg-background py-2 shadow"
                 >
                   <IconShare className="mr-2" />
                   Share
