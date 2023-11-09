@@ -20,6 +20,7 @@ export interface ChatPanelProps
   > {
   id?: string
   model?: string
+  chatOptions?: ChatRequestOptions
 }
 
 export function ChatPanel({
@@ -31,16 +32,8 @@ export function ChatPanel({
   input,
   setInput,
   messages,
-  model
+  chatOptions
 }: ChatPanelProps) {
-  const chatOptions: ChatRequestOptions = {
-    options: {
-      body: {
-        model: model
-      }
-    }
-  }
-
   return (
     <div
       className={cn(

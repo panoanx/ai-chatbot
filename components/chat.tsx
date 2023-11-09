@@ -23,8 +23,10 @@ import { toast } from 'react-hot-toast'
 import { usePathname, useRouter } from 'next/navigation'
 
 import ModelSelector from './model-selector'
+import { ChatRequestOptions } from 'ai'
 
 const IS_PREVIEW = process.env.VERCEL_ENV === 'preview'
+
 export interface ChatProps extends React.ComponentProps<'div'> {
   initialMessages?: Message[]
   id?: string
@@ -40,36 +42,60 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
   const [model, setModel] = useLocalStorage('model', 'gpt-3.5-turbo-16k')
   const [previewTokenDialog, setPreviewTokenDialog] = useState(IS_PREVIEW)
   const [previewTokenInput, setPreviewTokenInput] = useState(previewToken ?? '')
-  const { messages, append, reload, stop, isLoading, input, setInput } =
-    useChat({
-      initialMessages,
+  const {
+    messages,
+    append,
+    reload,
+    stop,
+    setMessages,
+    isLoading,
+    input,
+    setInput
+  } = useChat({
+    initialMessages,
+    id,
+    body: {
       id,
-      body: {
-        id,
-        previewToken
-      },
-      onResponse(response) {
-        if (response.status === 401) {
-          toast.error(response.statusText)
-        }
-      },
-      onFinish() {
-        if (!path.includes('chat')) {
-          router.push(`/chat/${id}`)
-          router.refresh()
-        }
+      previewToken
+    },
+    onResponse(response) {
+      if (response.status === 401) {
+        toast.error(response.statusText)
       }
-    })
+    },
+    onFinish() {
+      if (!path.includes('chat')) {
+        router.push(`/chat/${id}`)
+        router.refresh()
+      }
+    }
+  })
+
+  const chatOptions: ChatRequestOptions = {
+    options: {
+      body: {
+        model: model
+      }
+    }
+  }
+
   return (
     <>
       <div className={cn('pb-[200px] pt-4 md:pt-10 flex-1', className)}>
         <div className="h-8 flex items-center mx-auto -translate-y-4 my-4">
-          <ModelSelector model={model} setModel={setModel}/>
+          <ModelSelector model={model} setModel={setModel} />
         </div>
         <div>
           {messages.length ? (
             <>
-              <ChatList messages={messages} />
+              <ChatList
+                messages={messages}
+                setMessages={setMessages}
+                append={append}
+                id={id}
+                isLoading={isLoading}
+                chatOptions={chatOptions}
+              />
               <ChatScrollAnchor trackVisibility={isLoading} />
             </>
           ) : (
@@ -86,7 +112,7 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
         messages={messages}
         input={input}
         setInput={setInput}
-        model={model}
+        chatOptions={chatOptions}
       />
 
       <Dialog open={previewTokenDialog} onOpenChange={setPreviewTokenDialog}>
