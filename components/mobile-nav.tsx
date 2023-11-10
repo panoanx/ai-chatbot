@@ -25,7 +25,10 @@ export function MobileNav({ children }: SidebarProps) {
           <span className="sr-only">Toggle Sidebar</span>
         </Button>
       </SheetTrigger>
-      <SheetContent className="inset-y-0 flex h-auto w-[300px] flex-col p-0">
+      <SheetContent
+        className="inset-y-0 flex h-auto w-[300px] flex-col p-0"
+        side="left"
+      >
         <SheetHeader className="p-4">
           <SheetTitle className="text-sm">Chat History</SheetTitle>
         </SheetHeader>
