@@ -12,19 +12,14 @@ import {
 import { useEnterSubmit } from '@/lib/hooks/use-enter-submit'
 import { cn } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select'
 
 export interface PromptProps
   extends Pick<UseChatHelpers, 'input' | 'setInput'> {
   onSubmit: (value: string) => Promise<void>
   isLoading: boolean
 }
+
+
 
 export function PromptForm({
   onSubmit,
@@ -54,7 +49,7 @@ export function PromptForm({
       }}
       ref={formRef}
     >
-      <div className="relative flex max-h-60 w-full grow flex-row items-center overflow-hidden bg-background px-8 sm:rounded-md sm:border sm:px-12">
+      <div className="relative flex max-h-60 w-full grow flex-row items-center overflow-hidden bg-background pl-10 pr-12 sm:rounded-md sm:border sm:pl-12 sm:pr-16 ">
         <Tooltip>
           <TooltipTrigger asChild>
             <button
@@ -82,7 +77,7 @@ export function PromptForm({
           onChange={e => setInput(e.target.value)}
           placeholder="Send a message."
           spellCheck={false}
-          className="min-h-[60px] w-full resize-none bg-transparent px-4 py-[1.3rem] focus-within:outline-none sm:text-sm"
+          className="max-h-60 min-h-[60px] w-full resize-none bg-transparent px-2 py-[1.3rem] focus-within:outline-none sm:text-sm"
         />
         <div className="absolute right-0 top-3 sm:right-4">
           <Tooltip>
