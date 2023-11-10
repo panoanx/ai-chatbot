@@ -23,7 +23,6 @@ export function ChatMessageActions({
   const { isCopied, copyToClipboard } = useCopyToClipboard({ timeout: 2000 })
 
   const onCopy = () => {
-    if (isEditing) return setIsEditing(false)
     if (isCopied) return
     copyToClipboard(message.content)
   }
@@ -40,18 +39,25 @@ export function ChatMessageActions({
       <Button
         variant="ghost"
         size="icon"
-        onClick={e => setIsEditing(true)}
+        onClick={e => setIsEditing(!isEditing)}
         className={cn(
-          'w-8 h-8 p-2',
-          (isEditing || message.role === 'assistant') && 'hidden'
+          'h-8 w-8 p-2',
+          message.role === 'assistant' && 'hidden'
         )}
       >
-        <IconEdit />
+        {isEditing ? <IconClose /> : <IconEdit />}
         <span className="sr-only">Edit Message</span>
       </Button>
-      <Button variant="ghost" size="icon" onClick={onCopy} className="w-8 h-8 p-2"
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={onCopy}
+        className={cn(
+          'h-8 w-8 p-2',
+          message.role !== 'assistant' && 'hidden'
+        )}
       >
-        {!isEditing ? isCopied ? <IconCheck /> : <IconCopy /> : <IconClose />}
+        {isCopied ? <IconCheck /> : <IconCopy />}
         <span className="sr-only">Copy message</span>
       </Button>
     </div>
