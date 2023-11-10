@@ -66,6 +66,12 @@
   }
 }
  
+@media (max-width: 720px) {
+  pre {
+    width: calc(100vw - 110px);
+  }
+}
+
 @layer base {
   * {
     @apply border-border;
