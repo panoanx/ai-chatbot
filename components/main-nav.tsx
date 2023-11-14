@@ -15,7 +15,7 @@ export async function MainNav() {
   return (
     <>
       <MainSidebar>
-        <div className="h-full flex flex-col">
+        <div className="flex h-full flex-col">
           <div className="flex items-center justify-between p-4">
             <h4 className="text-sm font-medium">Chat History</h4>
           </div>
@@ -25,7 +25,7 @@ export async function MainNav() {
           <div className="flex flex-1 flex-col overflow-hidden">
             <React.Suspense
               fallback={
-                <div className="p-4 space-y-4">
+                <div className="space-y-4 p-4">
                   <Skeleton className="h-4 w-[200px]" />
                   <Skeleton className="h-4 w-[160px]" />
                   <Skeleton className="h-4 w-[160px]" />

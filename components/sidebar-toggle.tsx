@@ -63,7 +63,7 @@ export function MainSidebar({ children }: SidebarProps) {
   return (
     <div
       className={cn(
-        'peer absolute inset-y-0 z-30 hidden h-full -translate-x-full flex-col border-r bg-muted duration-300 ease-in-out data-[state=open]:translate-x-0 dark:bg-zinc-950 lg:flex lg:w-[250px] xl:w-[300px]'
+        'peer fixed inset-y-0 z-30 hidden top-16 h-[calc(100vh_-_theme(spacing.16))] -translate-x-full flex-col border-r bg-muted duration-300 ease-in-out data-[state=open]:translate-x-0 dark:bg-zinc-950 lg:flex lg:w-[250px] xl:w-[300px]'
       )}
       data-state={sidebarState}
     >
