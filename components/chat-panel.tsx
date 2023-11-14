@@ -63,14 +63,6 @@ export function ChatPanel({
                   <IconRefresh className="mr-2" />
                   Regenerate
                 </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => reload(chatOptions)}
-                  className="h-8 bg-background py-2 shadow"
-                >
-                  <IconShare className="mr-2" />
-                  Share
-                </Button>
               </div>
             )
           )}
