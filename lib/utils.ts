@@ -34,10 +34,19 @@ export async function fetcher<JSON = any>(
 }
 
 export function formatDate(input: string | number | Date): string {
-  const date = new Date(input)
+  let date: Date;
+
+  if (typeof input === 'string') {
+    date = new Date(parseInt(input));
+  } else if (typeof input === 'number') {
+    date = new Date(input);
+  } else {
+    date = input;
+  }
+
   return date.toLocaleDateString('en-US', {
     month: 'long',
     day: 'numeric',
     year: 'numeric'
-  })
+  });
 }
