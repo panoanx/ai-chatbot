@@ -124,6 +124,8 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
         input={input}
         setInput={setInput}
         chatOptions={chatOptions}
+        model={model}
+        setModel={setModel}
       />
 
       <Dialog open={previewTokenDialog} onOpenChange={setPreviewTokenDialog}>

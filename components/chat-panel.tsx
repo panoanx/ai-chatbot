@@ -7,6 +7,7 @@ import { IconRefresh, IconShare, IconStop } from '@/components/ui/icons'
 import { FooterText } from '@/components/footer'
 import { cn } from '@/lib/utils'
 import { ChatRequestOptions } from 'ai'
+import ModelSelector from './model-selector'
 export interface ChatPanelProps
   extends Pick<
     UseChatHelpers,
@@ -19,8 +20,9 @@ export interface ChatPanelProps
     | 'setInput'
   > {
   id?: string
-  model?: string
   chatOptions?: ChatRequestOptions
+  model: string
+  setModel: (value: string) => void
 }
 
 export function ChatPanel({
@@ -32,7 +34,9 @@ export function ChatPanel({
   input,
   setInput,
   messages,
-  chatOptions
+  chatOptions,
+  model,
+  setModel
 }: ChatPanelProps) {
   return (
     <div
@@ -54,7 +58,9 @@ export function ChatPanel({
             </Button>
           ) : (
             messages?.length > 0 && (
-              <div className="space-x-2">
+              <div className="inline-flex space-x-2">
+                <ModelSelector model={model} setModel={setModel} />
+
                 <Button
                   variant="outline"
                   onClick={() => reload(chatOptions)}
