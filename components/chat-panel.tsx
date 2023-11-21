@@ -58,9 +58,9 @@ export function ChatPanel({
             </Button>
           ) : (
             <>
-              <ModelSelector model={model} setModel={setModel} />
-              {messages?.length > 0 && (
-                <div className="inline-flex space-x-2">
+              <div className="inline-flex space-x-2">
+                <ModelSelector model={model} setModel={setModel} />
+                {messages?.length > 0 && (
                   <Button
                     variant="outline"
                     onClick={() => reload(chatOptions)}
@@ -69,8 +69,8 @@ export function ChatPanel({
                     <IconRefresh className="mr-2" />
                     Regenerate
                   </Button>
-                </div>
-              )}
+                )}
+              </div>
             </>
           )}
         </div>
