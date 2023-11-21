@@ -44,7 +44,9 @@ export function ChatMessage({
   }, [isEditing, message])
 
   // regex to replace \(\) and \[\] with $$ and $$
-  const parsedContent = message.content.replace(/\\\((.*?)\\\)/g, '$$ $1 $$').replace(/\\\[(.*?)\\\]/g, '\n$$$$ \n $1 \n $$$$\n');
+  const parsedContent = message.content
+    .replace(/\\\((.*?)\\\)/g, '$$ $1 $$')
+    .replace(/\\\[(.*?)\\\]/g, '\n$$$$ \n $1 \n $$$$\n')
 
   return (
     <div
@@ -61,7 +63,7 @@ export function ChatMessage({
       >
         {message.role === 'user' ? <IconUser /> : <IconOpenAI />}
       </div>
-      <div className="ml-4 flex-1 space-y-2 overflow-hidden px-1">
+      <div className="ml-2 flex-1 space-y-2 overflow-hidden px-1 sm:ml-4">
         {isEditing && !isShared && editMessage ? (
           <PromptForm
             onSubmit={async value => {
@@ -81,7 +83,27 @@ export function ChatMessage({
             rehypePlugins={[rehypeKatex as any]}
             components={{
               p({ children }) {
-                return <p className="mb-2 last:mb-0">{children}</p>
+                return <p className="mb-1 last:mb-0">{children}</p>
+              },
+              ul({ children }) {
+                return (
+                  <ul className="mb-1 ml-8 list-outside list-disc last:mb-0">
+                    {children}
+                  </ul>
+                )
+              },
+              ol({ children }) {
+                return (
+                  <ol className="mb-1 ml-8 list-outside list-decimal last:mb-0">
+                    {children}
+                  </ol>
+                )
+              },
+              li({ children }) {
+                return <li className="mb-0.5">{children}</li>
+              },
+              br() {
+                return <br />
               },
               code({ node, inline, className, children, ...props }) {
                 if (children.length) {
@@ -110,7 +132,10 @@ export function ChatMessage({
                   <CodeBlock
                     key={Math.random()}
                     language={(match && match[1]) || ''}
-                    value={String(children).replace(/\n$/, '')}
+                    value={
+                      String(children)
+                      // .replace(/\n$/, '')
+                    }
                     {...props}
                   />
                 )
