@@ -96,9 +96,9 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
   return (
     <>
       <div className={cn('flex-1 pb-[200px] pt-4 md:pt-10', className)}>
-        <div className="mx-auto my-4 flex h-8 -translate-y-4 items-center">
+        {/* <div className="mx-auto my-4 flex h-8 -translate-y-4 items-center">
           <ModelSelector model={model} setModel={setModel} />
-        </div>
+        </div> */}
         <div>
           {messages.length ? (
             <>

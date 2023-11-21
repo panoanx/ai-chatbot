@@ -57,20 +57,21 @@ export function ChatPanel({
               Stop generating
             </Button>
           ) : (
-            messages?.length > 0 && (
-              <div className="inline-flex space-x-2">
-                <ModelSelector model={model} setModel={setModel} />
-
-                <Button
-                  variant="outline"
-                  onClick={() => reload(chatOptions)}
-                  className="h-8 bg-background py-2 shadow"
-                >
-                  <IconRefresh className="mr-2" />
-                  Regenerate
-                </Button>
-              </div>
-            )
+            <>
+              <ModelSelector model={model} setModel={setModel} />
+              {messages?.length > 0 && (
+                <div className="inline-flex space-x-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => reload(chatOptions)}
+                    className="h-8 bg-background py-2 shadow"
+                  >
+                    <IconRefresh className="mr-2" />
+                    Regenerate
+                  </Button>
+                </div>
+              )}
+            </>
           )}
         </div>
         <div className="space-y-4 border-t bg-background px-4 py-3 shadow-lg sm:rounded-t-xl sm:border md:py-4">
