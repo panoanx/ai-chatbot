@@ -5,9 +5,10 @@ export const useLocalStorage = <T>(
   key: string,
   initialValue: T
 ): [T, (value: T) => void] => {
-  const [storedValue, setStoredValue] = useState(() => {
-    let currentValue
+  const [storedValue, setStoredValue] = useState<T>()
 
+  useEffect(() => {
+    let currentValue
     try {
       currentValue = JSON.parse(
         localStorage.getItem(key) || String(initialValue)
@@ -15,9 +16,8 @@ export const useLocalStorage = <T>(
     } catch (error) {
       currentValue = initialValue
     }
-
-    return currentValue
-  })
+    setStoredValue(currentValue)
+  }, [initialValue, key])
 
   useEffect(() => {
     // Retrieve from localStorage
@@ -32,6 +32,11 @@ export const useLocalStorage = <T>(
     setStoredValue(value)
     // Save to localStorage
     window.localStorage.setItem(key, JSON.stringify(value))
+  }
+
+  // prevent undefined storedValue
+  if (storedValue === undefined) {
+    return [initialValue, setValue]
   }
   return [storedValue, setValue]
 }

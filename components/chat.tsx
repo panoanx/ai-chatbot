@@ -22,7 +22,6 @@ import { Input } from './ui/input'
 import { toast } from 'react-hot-toast'
 import { usePathname, useRouter } from 'next/navigation'
 
-import ModelSelector from './model-selector'
 import { ChatRequestOptions } from 'ai'
 
 const IS_PREVIEW = process.env.VERCEL_ENV === 'preview'
