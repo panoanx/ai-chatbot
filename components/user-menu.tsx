@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import { IconExternalLink } from '@/components/ui/icons'
+import { IconExternalLink, IconGitHub } from '@/components/ui/icons'
 
 export interface UserMenuProps {
   user: Session['user']
@@ -34,7 +34,8 @@ export function UserMenu({ user }: UserMenuProps) {
                 className="w-6 h-6 transition-opacity duration-300 rounded-full select-none ring-1 ring-zinc-100/10 hover:opacity-80"
                 src={user?.image ? `${user.image}&s=60` : ''}
                 alt={user.name ?? 'Avatar'}
-                height={48} width={48}
+                height={48}
+                width={48}
               />
             ) : (
               <div className="flex items-center justify-center text-xs font-medium uppercase rounded-full select-none h-7 w-7 shrink-0 bg-muted/50 text-muted-foreground">
@@ -59,6 +60,17 @@ export function UserMenu({ user }: UserMenuProps) {
             >
               Robotflow Homepage
               <IconExternalLink className="w-3 h-3 ml-auto" />
+            </a>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <a
+              target="_blank"
+              href="https://github.com/panoanx/ai-chatbot/"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-between w-full text-xs"
+            >
+              Source Code
+              <IconGitHub className="w-3 h-3 ml-auto" />
             </a>
           </DropdownMenuItem>
           <DropdownMenuItem

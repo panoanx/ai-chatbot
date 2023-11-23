@@ -6,7 +6,7 @@ import { ClearHistory } from './clear-history'
 import { SidebarList } from '@/components/sidebar-list'
 
 import { clearChats } from '@/app/actions'
-import { auth } from '@/auth'
+import { auth } from '@/lib/auth'
 import { MainSidebar } from './sidebar-toggle'
 import NewChatButton from './new-chat-button'
 

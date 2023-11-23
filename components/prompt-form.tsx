@@ -13,6 +13,8 @@ import {
 import { useEnterSubmit } from '@/lib/hooks/use-enter-submit'
 import { cn } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
+import { Settings, Settings2 } from 'lucide-react'
+import { GearIcon } from '@radix-ui/react-icons'
 
 export interface PromptProps
   extends Pick<UseChatHelpers, 'input' | 'setInput'> {
@@ -64,10 +66,10 @@ export function PromptForm({
                 'absolute left-0 top-4 h-8 w-8 rounded-full bg-background p-0 sm:left-4'
               )}
             >
-              <IconPlus />
+              <GearIcon className='h-5 w-5' />
             </button>
           </TooltipTrigger>
-          <TooltipContent>New Implementing</TooltipContent>
+          <TooltipContent>Settings</TooltipContent>
         </Tooltip>
         <Textarea
           ref={inputRef}

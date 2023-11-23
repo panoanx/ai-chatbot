@@ -38,7 +38,13 @@ import {
 // gpt-4-0613	80,000 TPM	5,000 RPM
 // gpt-4-1106-preview	40,000 TPM	20 RPM, 100 RPD
 // gpt-4-vision-preview	40,000 TPM	20 RPM, 100 RPD
-const modelOptions = {
+
+interface groupOptions {
+  desc: string
+  models: Array<{ label: string; value: string; hint?: string }>
+}
+
+export const modelOptions: Record<string, groupOptions> = {
   chat: {
     desc: 'Chat',
     models: [
@@ -53,7 +59,22 @@ const modelOptions = {
     models: [
       { label: 'GPT-4 Vision', value: 'gpt-4-vision-preview', hint: '100 RPD' }
     ]
+  },
+  image: {
+    desc: 'Image Generation',
+    models: [{ label: 'DALL-E 2', value: 'dall-e-2' }]
   }
+}
+
+export const findModelByValue = (model: string) => {
+  // map over modelOptions and return the label
+  for (const [groupName, groupValue] of Object.entries(modelOptions)) {
+    const found = groupValue.models.find(option => option.value === model)
+    if (found) {
+      return { group: groupName, found }
+    }
+  }
+  return null
 }
 
 const CommandDescription = ({
@@ -75,16 +96,7 @@ interface ModelSelectorProps {
 
 export default function ModelSelector({ model, setModel }: ModelSelectorProps) {
   const [open, setOpen] = React.useState(false)
-  const findModelByValue = (model: string) => {
-    // map over modelOptions and return the label
-    for (const [groupName, groupValue] of Object.entries(modelOptions)) {
-      const found = groupValue.models.find(option => option.value === model)
-      if (found) {
-        return { group: groupName, found }
-      }
-    }
-    return null
-  }
+
   const modelGroups = Object.entries(modelOptions)
 
   return (

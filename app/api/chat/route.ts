@@ -6,7 +6,7 @@ import OpenAI from 'openai'
 
 import { HttpsProxyAgent } from 'https-proxy-agent'
 
-import { auth } from '@/auth'
+import { auth } from '@/lib/auth'
 import { nanoid } from '@/lib/utils'
 
 // export const runtime = 'edge'

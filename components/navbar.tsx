@@ -3,7 +3,7 @@ import { ThemeToggle } from '@/components/theme-toggle'
 import { ClearHistory } from '@/components/clear-history'
 import * as React from 'react'
 import { clearChats } from '@/app/actions'
-import { auth } from '@/auth'
+import { auth } from '@/lib/auth'
 import { SidebarList } from './sidebar-list'
 
 export default async function Navbar() {
