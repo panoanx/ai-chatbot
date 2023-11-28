@@ -8,25 +8,31 @@ import { GearIcon } from '@radix-ui/react-icons'
 import { Button } from './ui/button'
 import { Label } from './ui/label'
 import { Slider } from './ui/slider'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useLocalStorage } from '@/lib/hooks/use-local-storage'
 import { Switch } from './ui/switch'
+import { ChatRequestOptions } from 'ai'
 
-interface settingsOptions {
+export interface SettingsOptions {
   temperature: number
+  topP: number
   jsonMode: boolean
 }
-export interface settingsContextProps {
-  settings: settingsOptions
-  setSettingsByKey: (key: string, value: any) => void
+
+interface SettingsContextProps {
+  settings: SettingsOptions
+  setSettingsWrapper: (kv: Partial<SettingsOptions>) => void
 }
 
-const settingsContext = React.createContext<settingsContextProps>({
-  settings: {
-    temperature: 0.7,
-    jsonMode: false
-  },
-  setSettingsByKey: (key: string, value: any) => {}
+const defaultSettings: SettingsOptions = {
+  temperature: 0.7,
+  topP: 1,
+  jsonMode: false
+}
+
+export const SettingsContext = React.createContext<SettingsContextProps>({
+  settings: defaultSettings,
+  setSettingsWrapper: () => {}
 })
 
 export function SettingsContextProvider({
@@ -34,27 +40,98 @@ export function SettingsContextProvider({
 }: {
   children: React.ReactNode
 }) {
-  const [settings, setSettings] = useLocalStorage('settings', {
-    temperature: 0.7,
-    jsonMode: false
-  })
+  const [settings, setSettings] = useLocalStorage('settings', defaultSettings)
 
-  const setSettingsByKey = (key: string, value: any) => {
-    setSettings({ ...settings, [key]: value })
+  const setSettingsWrapper = (kv: Partial<SettingsOptions>) => {
+    setSettings({ ...settings, ...kv })
   }
 
   return (
-    <settingsContext.Provider value={{ settings, setSettingsByKey }}>
+    <SettingsContext.Provider value={{ settings, setSettingsWrapper }}>
       {children}
-    </settingsContext.Provider>
+    </SettingsContext.Provider>
+  )
+}
+
+function SwitchSetting({
+  key,
+  value,
+  label,
+  description,
+  onCheckedChange
+}: {
+  key: string
+  value: boolean
+  label: string
+  description: string
+  onCheckedChange: (value: boolean) => void
+}) {
+  return (
+    <div className="flex items-center justify-between space-x-2">
+      <Label htmlFor={key} className="flex flex-col space-y-1">
+        <span>{label}</span>
+        <span className=" text-xs text-muted-foreground">{description}</span>
+      </Label>
+      <Switch
+        id={key}
+        checked={value}
+        onCheckedChange={onCheckedChange}
+        className="ml-auto"
+      />
+    </div>
+  )
+}
+
+function SliderSetting({
+  key,
+  value,
+  min,
+  max,
+  label,
+  description,
+  onValueChange
+}: {
+  key: string
+  value: number
+  min?: number
+  max?: number
+  label: string
+  description?: string
+  onValueChange: (value: number) => void
+}) {
+  return (
+    <div className="">
+      <div className="flex items-center justify-between">
+        <Label htmlFor={key} className="w-48">
+          {label}
+        </Label>
+        <Slider
+          min={min}
+          max={max}
+          value={[value]}
+          step={0.01}
+          onValueChange={([value]) => onValueChange(value)}
+          className="[&_[role=slider]]:h-4 [&_[role=slider]]:w-4"
+          aria-label="Temperature"
+        />
+
+        <span className="ml-2 w-12 rounded-md border border-transparent px-2 py-0.5 text-right font-mono text-sm text-muted-foreground hover:border-border">
+          {value.toFixed(2)}
+        </span>
+      </div>
+      <span className="text-xs leading-snug text-muted-foreground">
+        {description}
+      </span>
+    </div>
   )
 }
 
 export function Settings() {
   const {
-    settings: { temperature, jsonMode },
-    setSettingsByKey
-  } = React.useContext(settingsContext)
+    settings: { temperature, topP, jsonMode },
+    setSettingsWrapper
+  } = React.useContext(SettingsContext)
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -63,7 +140,7 @@ export function Settings() {
           <span className="ml-2 hidden md:flex">Settings</span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[350px]">
+      <PopoverContent className="w-[350px] sm:w-[410px]">
         <div className="grid gap-4">
           <div className="space-y-2">
             <h4 className="font-medium leading-none">Chat</h4>
@@ -71,46 +148,47 @@ export function Settings() {
               Configure the chat settings.
             </p>
           </div>
-          <div className="grid gap-2">
-            {/* <div className="grid grid-cols-3 items-center gap-4">
-                  <Label htmlFor="systemPrompt">Sys<span className='hidden sm:inline'>tem</span> Prompt</Label>
-                  <Input
-                    id="systemPrompt"
-                    defaultValue=""
-                    className="col-span-2 h-8"
-                  />
-                </div> */}
-            <div className="inline-flex">
-              <div className="grid flex-1 grid-cols-3 items-center gap-4">
-                <Label htmlFor="temperature">Temperature</Label>
-                <Slider
-                  defaultValue={[temperature]}
-                  max={2}
-                  step={0.01}
-                  className="col-span-2"
-                  onValueChange={([temperature]) =>
-                    setSettingsByKey('temperature', temperature)
-                  }
-                />
-              </div>
-              <div className="ml-2 font-mono">{temperature.toFixed(2)}</div>
+          <div className="grid gap-4">
+            <div className="flex flex-col">
+              <SliderSetting
+                key="temperature"
+                value={temperature}
+                max={2}
+                label="Temperature"
+                onValueChange={temperature => {
+                  setSettingsWrapper({
+                    temperature: temperature,
+                    topP: defaultSettings.topP
+                  })
+                }}
+              />
+              <SliderSetting
+                key="topP"
+                value={topP}
+                max={1}
+                label="Top P"
+                onValueChange={topP => {
+                  setSettingsWrapper({
+                    topP: topP,
+                    temperature: defaultSettings.temperature
+                  })
+                }}
+              />
+              <span className="text-xs font-medium leading-snug text-muted-foreground peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                Set either the temperature (default 0.7, range 0-2) for
+                randomness or top_p (default 1) for nucleus sampling, not both.
+              </span>
             </div>
-            <div className="flex items-center">
-              <div className="">
-                <Label htmlFor="jsonMode" className="">
-                  JSON Mode
-                </Label>
-                <Switch
-                  id="jsonMode"
-                  checked={jsonMode}
-                  onCheckedChange={() =>
-                    setSettingsByKey('jsonMode', !jsonMode)
-                  }
-                  className="ml-auto"
-                />
-              </div>
-              <div className="">test</div>
-            </div>
+
+            <SwitchSetting
+              key="jsonMode"
+              value={jsonMode}
+              onCheckedChange={() =>
+                setSettingsWrapper({ jsonMode: !jsonMode })
+              }
+              label="Json Mode"
+              description="Ensure output is valid JSON."
+            />
           </div>
         </div>
       </PopoverContent>

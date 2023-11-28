@@ -16,13 +16,14 @@ import {
   DialogHeader,
   DialogTitle
 } from '@/components/ui/dialog'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { toast } from 'react-hot-toast'
 import { usePathname, useRouter } from 'next/navigation'
 
 import { ChatRequestOptions } from 'ai'
+import { SettingsContext } from './settings'
 
 const IS_PREVIEW = process.env.VERCEL_ENV === 'preview'
 
@@ -41,6 +42,7 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
   const [model, setModel] = useLocalStorage('model', 'gpt-3.5-turbo-16k')
   const [previewTokenDialog, setPreviewTokenDialog] = useState(IS_PREVIEW)
   const [previewTokenInput, setPreviewTokenInput] = useState(previewToken ?? '')
+  const {settings} = useContext(SettingsContext)
   const {
     messages,
     append,
@@ -55,7 +57,9 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
     id,
     body: {
       id,
-      previewToken
+      previewToken,
+      model: model,
+      settings: settings,
     },
     onResponse(response) {
       if (response.status === 401) {
@@ -70,14 +74,6 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
     }
   })
 
-  const chatOptions: ChatRequestOptions = {
-    options: {
-      body: {
-        model: model
-      }
-    }
-  }
-
   async function editMessage({ content = '', index = -1 }) {
     if (index === -1) return toast.error('Error editing message')
 
@@ -88,16 +84,12 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
         content: content,
         role: 'user'
       },
-      chatOptions
     )
   }
 
   return (
     <>
       <div className={cn('flex-1 pb-[200px] pt-4 md:pt-10', className)}>
-        {/* <div className="mx-auto my-4 flex h-8 -translate-y-4 items-center">
-          <ModelSelector model={model} setModel={setModel} />
-        </div> */}
         <div>
           {messages.length ? (
             <>
@@ -122,7 +114,6 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
         messages={messages}
         input={input}
         setInput={setInput}
-        chatOptions={chatOptions}
         model={model}
         setModel={setModel}
       />

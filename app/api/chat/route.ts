@@ -8,6 +8,7 @@ import { HttpsProxyAgent } from 'https-proxy-agent'
 
 import { auth } from '@/lib/auth'
 import { nanoid } from '@/lib/utils'
+import { SettingsOptions } from '@/components/settings'
 
 // export const runtime = 'edge'
 
@@ -20,7 +21,19 @@ const openai = new OpenAI({
 
 export async function POST(req: Request) {
   const json = await req.json()
-  const { messages, previewToken, model } = json
+  const { messages, previewToken, model, settings } = json
+  const { temperature, topP: top_p, jsonMode } = settings as SettingsOptions
+  const response_format =
+    {} as OpenAI.Chat.Completions.ChatCompletionCreateParams.ResponseFormat
+
+  if (jsonMode === true) {
+    messages.unshift({
+      role: 'system',
+      content: 'Response using strict JSON format.'
+    })
+    response_format.type = 'json_object'
+  }
+
   const session = await auth()
   const userId = session?.user.id
 
@@ -33,10 +46,12 @@ export async function POST(req: Request) {
   if (previewToken) openai.apiKey = previewToken
 
   const res = await openai.chat.completions.create({
+    stream: true,
     model: model,
     messages,
-    temperature: 0.7,
-    stream: true
+    temperature: temperature,
+    top_p: top_p,
+    response_format: response_format
   })
 
   // TODO: remove this in future
