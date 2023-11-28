@@ -1,9 +1,9 @@
 'use client'
 
 import React, { useContext, useEffect } from 'react'
-import { IconNextChat, IconSidebar } from './ui/icons'
+import { IconNextChat, IconSidebar } from '../ui/icons'
 // import { useSidebarState } from '@/lib/hooks/use-sidebar-toggle'/
-import { Button } from './ui/button'
+import { Button } from '../ui/button'
 import { cn } from '@/lib/utils'
 
 interface SidebarContextProps {

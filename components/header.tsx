@@ -5,31 +5,14 @@ import { cn } from '@/lib/utils'
 import { auth } from '@/lib/auth'
 import { clearChats } from '@/app/actions'
 import { Button, buttonVariants } from '@/components/ui/button'
-import { MobileNav } from '@/components/mobile-nav'
-import { SidebarList } from '@/components/sidebar-list'
-import {
-  IconGitHub,
-  IconNextChat,
-  IconSeparator,
-  IconVercel
-} from '@/components/ui/icons'
-import { SidebarFooter } from '@/components/sidebar-footer'
-import { ThemeToggle } from '@/components/theme-toggle'
-import { ClearHistory } from '@/components/clear-history'
+import { MobileNav } from '@/components/nav/mobile-nav'
+
 import { UserMenu } from '@/components/user-menu'
 import { LoginButton } from '@/components/login-button'
-import Navbar from './navbar'
-import { SidebarToggleButton } from './sidebar-toggle'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger
-} from '@/components/ui/popover'
-import { Input } from '@/components/ui/input'
-import { Label } from './ui/label'
-import { GearIcon } from '@radix-ui/react-icons'
-import { Slider } from './ui/slider'
+import Navbar from './nav/navbar'
+import { SidebarToggleButton } from './nav/sidebar-toggle'
 import { Settings } from './settings'
+import { IconNextChat, IconSeparator } from './ui/icons'
 
 export async function Header() {
   const session = await auth()

@@ -1,14 +1,14 @@
 import * as React from 'react'
-import { Skeleton } from './ui/skeleton'
+import { Skeleton } from '../ui/skeleton'
 import { SidebarFooter } from './sidebar-footer'
 import { ThemeToggle } from './theme-toggle'
-import { ClearHistory } from './clear-history'
-import { SidebarList } from '@/components/sidebar-list'
+import { ClearHistory } from '../clear-history'
+import { SidebarList } from './sidebar-list'
 
 import { clearChats } from '@/app/actions'
 import { auth } from '@/lib/auth'
 import { MainSidebar } from './sidebar-toggle'
-import NewChatButton from './new-chat-button'
+import NewChatButton from '../new-chat-button'
 
 export async function MainNav() {
   const session = await auth()

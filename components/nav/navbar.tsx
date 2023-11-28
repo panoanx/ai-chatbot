@@ -1,5 +1,5 @@
-import { SidebarFooter } from '@/components/sidebar-footer'
-import { ThemeToggle } from '@/components/theme-toggle'
+import { SidebarFooter } from './sidebar-footer'
+import { ThemeToggle } from './theme-toggle'
 import { ClearHistory } from '@/components/clear-history'
 import * as React from 'react'
 import { clearChats } from '@/app/actions'

@@ -12,8 +12,8 @@ import React from 'react'
 import { auth } from '@/lib/auth'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Skeleton } from '@/components/ui/skeleton'
-import { MainNav } from '@/components/main-nav'
-import MainPanel from '@/components/main-panel'
+import { MainNav } from '@/components/nav/main-nav'
+import MainPanel from '@/components/nav/main-panel'
 
 export const metadata: Metadata = {
   title: {

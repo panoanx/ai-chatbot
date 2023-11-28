@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/sheet'
 import { IconSidebar } from '@/components/ui/icons'
 import Link from 'next/link'
-import NewChatButton from './new-chat-button'
+import NewChatButton from '../new-chat-button'
 
 export interface SidebarProps {
   children?: React.ReactNode
