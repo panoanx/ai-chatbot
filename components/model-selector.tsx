@@ -48,10 +48,10 @@ export const modelOptions: Record<string, groupOptions> = {
   chat: {
     desc: 'Chat',
     models: [
-      { label: 'GPT-3.5', value: 'gpt-3.5-turbo' },
-      { label: 'GPT-3.5 16k', value: 'gpt-3.5-turbo-16k' },
-      { label: 'GPT-4', value: 'gpt-4', hint: 'SLOW' },
-      { label: 'GPT-4 128K', value: 'gpt-4-1106-preview' }
+      { label: 'GPT-3.5 16k', value: 'gpt-3.5-turbo-1106', hint:'Turbo' },
+      // { label: 'GPT-3.5 16k', value: 'gpt-3.5-turbo-16k' },
+      { label: 'GPT-4', value: 'gpt-4', hint: 'Legacy' },
+      { label: 'GPT-4 128K', value: 'gpt-4-1106-preview', hint: 'Turbo' }
     ]
   },
   vision: {

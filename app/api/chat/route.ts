@@ -24,14 +24,17 @@ export async function POST(req: Request) {
   const { messages, previewToken, model, settings } = json
   const { temperature, topP: top_p, jsonMode } = settings as SettingsOptions
   const response_format =
-    {} as OpenAI.Chat.Completions.ChatCompletionCreateParams.ResponseFormat
+    { type: 'text' } as OpenAI.Chat.Completions.ChatCompletionCreateParams.ResponseFormat
 
   if (jsonMode === true) {
     messages.unshift({
       role: 'system',
       content: 'Response using strict JSON format.'
     })
-    response_format.type = 'json_object'
+    // TODO: remove this 
+    if ('1106' in model) {
+      response_format.type = 'json_object'
+    }
   }
 
   const session = await auth()

@@ -187,7 +187,7 @@ export function Settings() {
                 setSettingsWrapper({ jsonMode: !jsonMode })
               }
               label="Json Mode"
-              description="Ensure output is valid JSON."
+              description="Ensure output is valid JSON. Works only with turbo models."
             />
           </div>
         </div>
