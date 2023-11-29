@@ -16,6 +16,7 @@ build
 # misc
 .DS_Store
 *.pem
+redis-data
 
 # debug
 npm-debug.log*

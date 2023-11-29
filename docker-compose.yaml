@@ -5,7 +5,7 @@ services:
     ports:
       - '7990:6379'
     volumes:
-      - /srv/docker/redis:/var/lib/redis
+      - ./redis-data:/data
   serverless-redis-http:
     ports:
       - '7991:80'
