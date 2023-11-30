@@ -29,6 +29,7 @@ export interface PromptProps
   }) => Promise<void>
   isLoading: boolean
   initialImageUrls?: string[]
+  setIsVision?: (isVision: boolean) => void
 }
 
 export function PromptForm({
@@ -36,7 +37,8 @@ export function PromptForm({
   input,
   setInput,
   isLoading,
-  initialImageUrls
+  initialImageUrls,
+  setIsVision
 }: PromptProps) {
   const { formRef, onKeyDown } = useEnterSubmit()
   const inputRef = React.useRef<HTMLTextAreaElement>(null)
@@ -54,6 +56,16 @@ export function PromptForm({
       inputRef.current.focus()
     }
   }, [])
+
+  React.useEffect(() => {
+    if (setIsVision) {
+      if (imageUrls && imageUrls.length > 0) {
+        setIsVision(true)
+      } else {
+        setIsVision(false)
+      }
+    }
+  }, [imageUrls, setIsVision])
 
   const handlePaste = React.useCallback(
     (event: React.ClipboardEvent) => {

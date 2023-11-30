@@ -25,20 +25,6 @@ import {
   PopoverContent,
   PopoverTrigger
 } from '@/components/ui/popover'
-import { types } from 'util'
-
-// gpt-3.5-turbo-instruct
-// gpt-3.5-turbo	160,000 TPM	5,000 RPM
-// gpt-3.5-turbo-0301	160,000 TPM	5,000 RPM
-// gpt-3.5-turbo-0613	160,000 TPM	5,000 RPM
-// gpt-3.5-turbo-1106	160,000 TPM	5,000 RPM
-// gpt-3.5-turbo-16k	180,000 TPM	5,000 RPM
-// gpt-3.5-turbo-16k-0613	180,000 TPM	5,000 RPM
-// gpt-4	80,000 TPM	5,000 RPM
-// gpt-4-0314	80,000 TPM	5,000 RPM
-// gpt-4-0613	80,000 TPM	5,000 RPM
-// gpt-4-1106-preview	40,000 TPM	20 RPM, 100 RPD
-// gpt-4-vision-preview	40,000 TPM	20 RPM, 100 RPD
 
 interface groupOptions {
   desc: string
@@ -57,9 +43,7 @@ export const modelOptions: Record<string, groupOptions> = {
   },
   vision: {
     desc: 'Chat with Images',
-    models: [
-      { label: 'GPT-4 Vision', value: 'gpt-4-vision-preview', hint: '' }
-    ]
+    models: [{ label: 'GPT-4 Vision', value: 'gpt-4-vision-preview', hint: '' }]
   },
   image: {
     desc: 'Image Generation',
@@ -90,13 +74,17 @@ const CommandDescription = ({
   )
 }
 
-type ModelType = keyof typeof modelOptions
+type ModelGroupType = keyof typeof modelOptions
+export const modelValues = Object.values(modelOptions)
+  .map(group => group.models.map(model => model.value))
+  .flat()
+export type ModelValueType = typeof modelValues[number]
 
 interface ModelSelectorProps {
   model: string
   setModel: (value: string) => void
   disabled?: boolean
-  modelTypes?: ModelType[]
+  modelTypes?: ModelGroupType[]
 }
 
 export default function ModelSelector({
@@ -110,7 +98,7 @@ export default function ModelSelector({
   const modelGroups =
     modelTypes && modelTypes.length > 0
       ? Object.entries(modelOptions).filter(([group]) =>
-          modelTypes.includes(group as ModelType)
+          modelTypes.includes(group as ModelGroupType)
         )
       : Object.entries(modelOptions)
 

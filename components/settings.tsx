@@ -12,11 +12,14 @@ import React, { useEffect } from 'react'
 import { useLocalStorage } from '@/lib/hooks/use-local-storage'
 import { Switch } from './ui/switch'
 import { ChatRequestOptions } from 'ai'
+import ModelSelector, { ModelValueType } from './model-selector'
+import { cn } from '@/lib/utils'
 
 export interface SettingsOptions {
   temperature: number
   topP: number
   jsonMode: boolean
+  defaultModel: ModelValueType
 }
 
 interface SettingsContextProps {
@@ -27,7 +30,8 @@ interface SettingsContextProps {
 const defaultSettings: SettingsOptions = {
   temperature: 0.7,
   topP: 1,
-  jsonMode: false
+  jsonMode: false,
+  defaultModel: 'gpt-3.5-turbo-16k'
 }
 
 export const SettingsContext = React.createContext<SettingsContextProps>({
@@ -120,9 +124,9 @@ function SliderSetting({
   )
 }
 
-export function Settings() {
+export function Settings({ className }: { className?: string }) {
   const {
-    settings: { temperature, topP, jsonMode },
+    settings: { temperature, topP, jsonMode, defaultModel },
     setSettingsWrapper
   } = React.useContext(SettingsContext)
 
@@ -134,7 +138,7 @@ export function Settings() {
           <span className="ml-2 hidden md:flex">Settings</span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[350px] sm:w-[410px]">
+      <PopoverContent className={cn('w-[350px] sm:w-[410px]', className)}>
         <div className="grid gap-4">
           <div className="space-y-2">
             <h4 className="font-medium leading-none">Chat</h4>
@@ -143,6 +147,20 @@ export function Settings() {
             </p>
           </div>
           <div className="grid gap-4">
+            <div className="flex items-center justify-between">
+              <Label className="flex flex-col space-y-1">
+                <span>Default Model</span>
+                <span className=" text-xs text-muted-foreground">
+                  Model for initiating a new chat.
+                </span>
+              </Label>
+              <ModelSelector
+                model={defaultModel}
+                setModel={value => {
+                  setSettingsWrapper({ defaultModel: value })
+                }}
+              />
+            </div>
             <div className="flex flex-col">
               <SliderSetting
                 key="temperature"

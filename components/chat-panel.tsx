@@ -45,6 +45,7 @@ export function ChatPanel({
         message.image_urls?.every(url => url.trim())
     )
   )
+  const [isCurrentVision, setIsCurrentVision] = useState(false)
 
   React.useEffect(() => {
     setIsVision(
@@ -52,9 +53,9 @@ export function ChatPanel({
         message =>
           message.role === 'user' && //
           message.image_urls?.every(url => url.trim())
-      )
+      ) || isCurrentVision
     )
-  }, [messages])
+  }, [messages, isCurrentVision])
 
   return (
     <div
@@ -120,6 +121,7 @@ export function ChatPanel({
             input={input}
             setInput={setInput}
             isLoading={isLoading}
+            setIsVision={setIsCurrentVision}
           />
           {/* <FooterText className="hidden sm:block" /> */}
         </div>

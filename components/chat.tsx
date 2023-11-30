@@ -39,10 +39,10 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
     'ai-token',
     null
   )
-  const [model, setModel] = useLocalStorage('model', 'gpt-3.5-turbo-16k')
   const [previewTokenDialog, setPreviewTokenDialog] = useState(IS_PREVIEW)
   const [previewTokenInput, setPreviewTokenInput] = useState(previewToken ?? '')
   const { settings } = useContext(SettingsContext)
+  const [model, setModel] = useState(settings.defaultModel)
   const {
     messages,
     append,
