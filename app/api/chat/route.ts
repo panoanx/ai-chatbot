@@ -68,6 +68,8 @@ export async function POST(req: Request) {
       ...imageContent
     ]
     messages[messages.length - 1].image_urls = image_urls
+    // TODO: temporary fix for the openai api bug
+    createParams.max_tokens = 4096
   }
 
   if (previewToken) openai.apiKey = previewToken
