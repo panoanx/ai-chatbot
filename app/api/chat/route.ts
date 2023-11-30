@@ -1,7 +1,7 @@
 'use server'
 
 import { kv } from '@vercel/kv'
-import { OpenAIStream, StreamingTextResponse } from 'ai'
+import { OpenAIStream, StreamingTextResponse, streamToResponse } from 'ai'
 import OpenAI from 'openai'
 
 import { HttpsProxyAgent } from 'https-proxy-agent'
@@ -49,19 +49,19 @@ export async function POST(req: Request) {
   // override the last message if it's a user message and there are images
   // caution: only message sent to the api is modified, not the original one
   // the original one will keep the frontend manner
-  if (messages[messages.length - 1].role === 'user' && image_urls.length > 0) {
+  if (messages[messages.length - 1].role === 'user' && image_urls.length > 0 && model.includes('vision')) {
     const textContent = {
       type: 'text',
       text: messages[messages.length - 1].content
     }
     const imageContent = image_urls.map(
       (url: string) =>
-        ({
-          type: 'image_url',
-          image_url: {
-            url: url
-          }
-        } as ChatCompletionContentPartImage)
+      ({
+        type: 'image_url',
+        image_url: {
+          url: url
+        }
+      } as ChatCompletionContentPartImage)
     )
     createParams.messages[messages.length - 1].content = [
       textContent,
@@ -69,6 +69,9 @@ export async function POST(req: Request) {
     ]
     messages[messages.length - 1].image_urls = image_urls
     // TODO: temporary fix for the openai api bug
+
+  }
+  if (model.includes('vision')) {
     createParams.max_tokens = 4096
   }
 

@@ -6,7 +6,7 @@ import { ButtonScrollToBottom } from '@/components/button-scroll-to-bottom'
 import { IconRefresh, IconShare, IconStop } from '@/components/ui/icons'
 import { FooterText } from '@/components/footer'
 import { cn } from '@/lib/utils'
-import { ChatRequestOptions } from 'ai'
+import { ChatRequestOptions, Message } from 'ai'
 import ModelSelector from './model-selector'
 import { useState } from 'react'
 import React from 'react'
@@ -38,23 +38,19 @@ export function ChatPanel({
   model,
   setModel
 }: ChatPanelProps) {
-  const [isVision, setIsVision] = useState(
+  const isVisionMessages = (messages: Message[]) =>
     messages.some(
       message =>
-        message.role === 'user' && //
+        message.role === 'user' &&
+        message.image_urls &&
+        message.image_urls.length > 0 &&
         message.image_urls?.every(url => url.trim())
     )
-  )
+  const [isVision, setIsVision] = useState(isVisionMessages(messages))
   const [isCurrentVision, setIsCurrentVision] = useState(false)
 
   React.useEffect(() => {
-    setIsVision(
-      messages.some(
-        message =>
-          message.role === 'user' && //
-          message.image_urls?.every(url => url.trim())
-      ) || isCurrentVision
-    )
+    setIsVision(isVisionMessages(messages) || isCurrentVision)
   }, [messages, isCurrentVision])
 
   return (
