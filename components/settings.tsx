@@ -54,13 +54,11 @@ export function SettingsContextProvider({
 }
 
 function SwitchSetting({
-  key,
   value,
   label,
   description,
   onCheckedChange
 }: {
-  key: string
   value: boolean
   label: string
   description: string
@@ -68,12 +66,12 @@ function SwitchSetting({
 }) {
   return (
     <div className="flex items-center justify-between space-x-2">
-      <Label htmlFor={key} className="flex flex-col space-y-1">
+      <Label className="flex flex-col space-y-1">
         <span>{label}</span>
         <span className=" text-xs text-muted-foreground">{description}</span>
       </Label>
       <Switch
-        id={key}
+        id={label}
         checked={value}
         onCheckedChange={onCheckedChange}
         className="ml-auto"
@@ -83,7 +81,6 @@ function SwitchSetting({
 }
 
 function SliderSetting({
-  key,
   value,
   min,
   max,
@@ -91,7 +88,6 @@ function SliderSetting({
   description,
   onValueChange
 }: {
-  key: string
   value: number
   min?: number
   max?: number
@@ -102,9 +98,7 @@ function SliderSetting({
   return (
     <div className="">
       <div className="flex items-center justify-between">
-        <Label htmlFor={key} className="w-48">
-          {label}
-        </Label>
+        <Label className="w-48">{label}</Label>
         <Slider
           min={min}
           max={max}
@@ -153,7 +147,7 @@ export function Settings() {
               <SliderSetting
                 key="temperature"
                 value={temperature}
-                max={2}
+                max={1}
                 label="Temperature"
                 onValueChange={temperature => {
                   setSettingsWrapper({

@@ -4,7 +4,7 @@ import * as React from 'react'
 import Textarea from 'react-textarea-autosize'
 
 import { Button, buttonVariants } from '@/components/ui/button'
-import { IconArrowElbow, IconPlus } from '@/components/ui/icons'
+import { IconArrowElbow, IconClose, IconPlus } from '@/components/ui/icons'
 import {
   Tooltip,
   TooltipContent,
@@ -15,30 +15,63 @@ import { cn } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
 import { Settings, Settings2 } from 'lucide-react'
 import { GearIcon } from '@radix-ui/react-icons'
+import { ImageUploader } from './image-uploader'
+import Image from 'next/image'
 
 export interface PromptProps
   extends Pick<UseChatHelpers, 'input' | 'setInput'> {
-  onSubmit: (value: string) => Promise<void>
+  onSubmit: ({
+    text,
+    image_urls
+  }: {
+    text: string
+    image_urls: string[]
+  }) => Promise<void>
   isLoading: boolean
+  initialImageUrls?: string[]
 }
-
-
 
 export function PromptForm({
   onSubmit,
   input,
   setInput,
-  isLoading
+  isLoading,
+  initialImageUrls
 }: PromptProps) {
   const { formRef, onKeyDown } = useEnterSubmit()
   const inputRef = React.useRef<HTMLTextAreaElement>(null)
-  const router = useRouter()
+  const [imageUrls, _setImageUrls] = React.useState<string[]>(
+    initialImageUrls || []
+  )
+
+  const setImageUrls = React.useCallback((urls: string[]) => {
+    const uniqueUrls = Array.from(new Set(urls))
+    _setImageUrls(uniqueUrls)
+  }, [])
 
   React.useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus()
     }
   }, [])
+
+  const handlePaste = React.useCallback(
+    (event: React.ClipboardEvent) => {
+      const items = event.clipboardData.items
+      for (const item of items) {
+        if (item.type.indexOf('image') === 0) {
+          const blob = item.getAsFile()
+          const reader = new FileReader()
+          reader.onload = readerEvent => {
+            setImageUrls([...imageUrls, readerEvent.target?.result as string])
+          }
+          reader.readAsDataURL(blob as Blob)
+          break
+        }
+      }
+    },
+    [imageUrls, setImageUrls]
+  )
 
   return (
     <form
@@ -48,41 +81,26 @@ export function PromptForm({
           return
         }
         setInput('')
-        await onSubmit(input)
+        setImageUrls([])
+        await onSubmit({ text: input, image_urls: imageUrls })
       }}
       ref={formRef}
     >
-      <div className="relative flex max-h-60 w-full grow flex-row items-center overflow-hidden bg-background pl-10 pr-12 sm:rounded-md sm:border sm:pl-12 sm:pr-16 ">
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button
-              onClick={e => {
-                e.preventDefault()
-                router.refresh()
-                router.push('/')
-              }}
-              className={cn(
-                buttonVariants({ size: 'sm', variant: 'outline' }),
-                'absolute left-0 top-4 h-8 w-8 rounded-full bg-background p-0 sm:left-4'
-              )}
-            >
-              <GearIcon className='h-5 w-5' />
-            </button>
-          </TooltipTrigger>
-          <TooltipContent>Settings</TooltipContent>
-        </Tooltip>
+      <div className="relative flex max-h-96 w-full grow flex-row items-center overflow-hidden bg-background pl-10 pr-12 sm:rounded-md sm:border sm:pl-12 sm:pr-16 ">
+        <ImageUploader imageUrls={imageUrls} setImageUrls={setImageUrls} />
         <Textarea
           ref={inputRef}
           tabIndex={0}
-          onKeyDown={ e => {
+          onKeyDown={e => {
             if (isLoading || input === '') return
-            onKeyDown(e)}
-          }
+            onKeyDown(e)
+          }}
           rows={1}
           value={input}
           onChange={e => setInput(e.target.value)}
           placeholder="Send a message."
           spellCheck={false}
+          onPaste={handlePaste}
           className="max-h-60 min-h-[60px] w-full resize-none bg-transparent px-2 py-[1.3rem] focus-within:outline-none sm:text-sm"
         />
         <div className="absolute right-0 top-3 sm:right-4">
@@ -100,6 +118,38 @@ export function PromptForm({
             <TooltipContent>Send message</TooltipContent>
           </Tooltip>
         </div>
+      </div>
+      <div className="mt-2 flex w-full justify-start space-x-2 overflow-auto">
+        {imageUrls.map((url, index) => (
+          <>
+            <div className="relative">
+              <Image
+                key={index}
+                src={url}
+                width="0"
+                height="0"
+                sizes="100vw"
+                alt=""
+                className="h-auto max-h-32 w-auto rounded shadow-md"
+              />
+              <div className="absolute right-1 top-1">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-5 w-5 rounded-full bg-background/60 p-0"
+                  onClick={() => {
+                    setImageUrls([
+                      ...imageUrls.slice(0, index),
+                      ...imageUrls.slice(index + 1)
+                    ])
+                  }}
+                >
+                  <IconClose className="h-4 w-4 p-0" />
+                </Button>
+              </div>
+            </div>
+          </>
+        ))}
       </div>
     </form>
   )

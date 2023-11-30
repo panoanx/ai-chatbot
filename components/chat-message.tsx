@@ -5,8 +5,11 @@
 import { Message } from 'ai'
 import remarkGfm from 'remark-gfm'
 import remarkMath, { Options } from 'remark-math'
+import {
+  ChatCompletionContentPart,
+  ChatCompletionContentPartText
+} from 'openai/resources'
 
-import { cn } from '@/lib/utils'
 import { CodeBlock } from '@/components/ui/codeblock'
 import { MemoizedReactMarkdown } from '@/components/markdown'
 import { IconOpenAI, IconUser } from '@/components/ui/icons'
@@ -16,7 +19,8 @@ import { Prompt } from 'next/font/google'
 import { PromptForm } from './prompt-form'
 import { isContext } from 'vm'
 import rehypeKatex from 'rehype-katex'
-
+import { cn } from '@/lib/utils'
+import Image from 'next/image'
 export interface ChatMessageProps {
   message: Message
   index: number
@@ -43,10 +47,23 @@ export function ChatMessage({
     }
   }, [isEditing, message])
 
+  const replaceLogic = (content: string) => {
+    try {
+      return content
+        .replace(/\\\((.*?)\\\)/g, '$$ $1 $$')
+        .replace(/\\\[(.*?)\\\]/g, '\n$$$$ \n $1 \n $$$$\n')
+    } catch (error) {
+      console.log('error in replaceLogic', error)
+      return content
+    }
+  }
+
   // regex to replace \(\) and \[\] with $$ and $$
-  const parsedContent = message.content
-    .replace(/\\\((.*?)\\\)/g, '$$ $1 $$')
-    .replace(/\\\[(.*?)\\\]/g, '\n$$$$ \n $1 \n $$$$\n')
+  const messageParser = (message: Message) => {
+    return replaceLogic(message.content)
+  }
+
+  const parsedContent = messageParser(message) // : 'string | ChatCompletionContentPart[]'
 
   return (
     <div
@@ -64,17 +81,33 @@ export function ChatMessage({
         {message.role === 'user' ? <IconUser /> : <IconOpenAI />}
       </div>
       <div className="ml-2 flex-1 space-y-2 overflow-hidden px-1 sm:ml-4">
+        {!isEditing && message.image_urls && message.image_urls.length > 0 && (
+          <div className="relative">
+            {message.image_urls.map((url, index) => (
+              <Image
+                key={index}
+                src={url}
+                width="0"
+                height="0"
+                sizes="100vw"
+                alt=""
+                className="h-auto w-auto rounded"
+              />
+            ))}
+          </div>
+        )}
         {isEditing && !isShared && editMessage ? (
           <PromptForm
-            onSubmit={async value => {
+            onSubmit={async ({ text, image_urls }) => {
               setIsEditing(false)
               if (editMessage) {
-                await editMessage({ content: value, index })
+                await editMessage({ content: text, index })
               }
             }}
             input={input}
             setInput={setInput}
             isLoading={isLoading || false}
+            initialImageUrls={message.image_urls || []}
           />
         ) : (
           <MemoizedReactMarkdown

@@ -1,6 +1,6 @@
 'use client'
 
-import { useChat, type Message } from 'ai/react'
+import { Message, useChat } from 'ai/react'
 
 import { cn } from '@/lib/utils'
 import { ChatList } from '@/components/chat-list'
@@ -42,7 +42,7 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
   const [model, setModel] = useLocalStorage('model', 'gpt-3.5-turbo-16k')
   const [previewTokenDialog, setPreviewTokenDialog] = useState(IS_PREVIEW)
   const [previewTokenInput, setPreviewTokenInput] = useState(previewToken ?? '')
-  const {settings} = useContext(SettingsContext)
+  const { settings } = useContext(SettingsContext)
   const {
     messages,
     append,
@@ -59,7 +59,7 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
       id,
       previewToken,
       model: model,
-      settings: settings,
+      settings: settings
     },
     onResponse(response) {
       if (response.status === 401) {
@@ -78,18 +78,16 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
     if (index === -1) return toast.error('Error editing message')
 
     setMessages(messages.slice(0, index))
-    return await append(
-      {
-        id,
-        content: content,
-        role: 'user'
-      },
-    )
+    return await append({
+      id,
+      content: content,
+      role: 'user'
+    })
   }
 
   return (
     <>
-      <div className={cn('flex-1 pb-[200px] pt-4 md:pt-10', className)}>
+      <div className={cn('flex-1 pb-[500px] pt-4 md:pt-10', className)}>
         <div>
           {messages.length ? (
             <>

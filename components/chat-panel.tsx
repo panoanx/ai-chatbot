@@ -8,6 +8,8 @@ import { FooterText } from '@/components/footer'
 import { cn } from '@/lib/utils'
 import { ChatRequestOptions } from 'ai'
 import ModelSelector from './model-selector'
+import { useState } from 'react'
+import React from 'react'
 export interface ChatPanelProps
   extends Pick<
     UseChatHelpers,
@@ -20,7 +22,6 @@ export interface ChatPanelProps
     | 'setInput'
   > {
   id?: string
-  chatOptions?: ChatRequestOptions
   model: string
   setModel: (value: string) => void
 }
@@ -34,10 +35,27 @@ export function ChatPanel({
   input,
   setInput,
   messages,
-  chatOptions,
   model,
   setModel
 }: ChatPanelProps) {
+  const [isVision, setIsVision] = useState(
+    messages.some(
+      message =>
+        message.role === 'user' && //
+        message.image_urls?.every(url => url.trim())
+    )
+  )
+
+  React.useEffect(() => {
+    setIsVision(
+      messages.some(
+        message =>
+          message.role === 'user' && //
+          message.image_urls?.every(url => url.trim())
+      )
+    )
+  }, [messages])
+
   return (
     <div
       className={cn(
@@ -59,11 +77,19 @@ export function ChatPanel({
           ) : (
             <>
               <div className="inline-flex space-x-2">
-                <ModelSelector model={model} setModel={setModel} />
+                <ModelSelector
+                  model={model}
+                  setModel={setModel}
+                  modelTypes={[
+                    ...(isVision ? ['vision'] : [])
+                    // ...(ifImage && ['image']),
+                    // ...(ifChat && ['chat'])
+                  ]}
+                />
                 {messages?.length > 0 && (
                   <Button
                     variant="outline"
-                    onClick={() => reload(chatOptions)}
+                    onClick={() => reload()}
                     className="h-8 bg-background py-2 shadow"
                   >
                     <IconRefresh className="mr-2" />
@@ -76,21 +102,26 @@ export function ChatPanel({
         </div>
         <div className="space-y-4 border-t bg-background px-4 py-3 shadow-lg sm:rounded-t-xl sm:border md:py-4">
           <PromptForm
-            onSubmit={async value => {
+            onSubmit={async ({ text, image_urls }) => {
               await append(
                 {
                   id,
-                  content: value,
+                  content: text,
+                  image_urls: image_urls,
                   role: 'user'
                 },
-                chatOptions
+                {
+                  data: {
+                    encoded_image_urls: JSON.stringify(image_urls)
+                  }
+                }
               )
             }}
             input={input}
             setInput={setInput}
             isLoading={isLoading}
           />
-          <FooterText className="hidden sm:block" />
+          {/* <FooterText className="hidden sm:block" /> */}
         </div>
       </div>
     </div>

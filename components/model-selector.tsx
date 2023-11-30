@@ -25,6 +25,7 @@ import {
   PopoverContent,
   PopoverTrigger
 } from '@/components/ui/popover'
+import { types } from 'util'
 
 // gpt-3.5-turbo-instruct
 // gpt-3.5-turbo	160,000 TPM	5,000 RPM
@@ -48,7 +49,7 @@ export const modelOptions: Record<string, groupOptions> = {
   chat: {
     desc: 'Chat',
     models: [
-      { label: 'GPT-3.5 16k', value: 'gpt-3.5-turbo-1106', hint:'Turbo' },
+      { label: 'GPT-3.5 16k', value: 'gpt-3.5-turbo-1106', hint: 'Turbo' },
       // { label: 'GPT-3.5 16k', value: 'gpt-3.5-turbo-16k' },
       { label: 'GPT-4', value: 'gpt-4', hint: 'Legacy' },
       { label: 'GPT-4 128K', value: 'gpt-4-1106-preview', hint: 'Turbo' }
@@ -57,7 +58,7 @@ export const modelOptions: Record<string, groupOptions> = {
   vision: {
     desc: 'Chat with Images',
     models: [
-      { label: 'GPT-4 Vision', value: 'gpt-4-vision-preview', hint: '100 RPD' }
+      { label: 'GPT-4 Vision', value: 'gpt-4-vision-preview', hint: '' }
     ]
   },
   image: {
@@ -89,15 +90,41 @@ const CommandDescription = ({
   )
 }
 
+type ModelType = keyof typeof modelOptions
+
 interface ModelSelectorProps {
   model: string
   setModel: (value: string) => void
+  disabled?: boolean
+  modelTypes?: ModelType[]
 }
 
-export default function ModelSelector({ model, setModel }: ModelSelectorProps) {
+export default function ModelSelector({
+  model,
+  setModel,
+  disabled,
+  modelTypes
+}: ModelSelectorProps) {
   const [open, setOpen] = React.useState(false)
 
-  const modelGroups = Object.entries(modelOptions)
+  const modelGroups =
+    modelTypes && modelTypes.length > 0
+      ? Object.entries(modelOptions).filter(([group]) =>
+          modelTypes.includes(group as ModelType)
+        )
+      : Object.entries(modelOptions)
+
+  // if model does not belong to modelGroups, set it to the first model in filtered model option
+  useEffect(() => {
+    const valueExists = (value: string): boolean => {
+      return modelGroups.some(([_, group]) =>
+        group.models.some((model: any) => model.value === value)
+      )
+    }
+    if (!valueExists(model)) {
+      setModel(modelGroups[0][1].models[0].value)
+    }
+  }, [model, modelGroups, setModel])
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -106,6 +133,7 @@ export default function ModelSelector({ model, setModel }: ModelSelectorProps) {
           variant="outline"
           role="combobox"
           aria-expanded={open}
+          disabled={disabled}
           className="inline-flex h-8 w-[170px] items-center bg-background font-medium shadow"
         >
           <CubeIcon className="mr-2 h-4 w-4" />

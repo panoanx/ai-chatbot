@@ -45,6 +45,7 @@
     "next-auth": "5.0.0-beta.3",
     "next-themes": "^0.2.1",
     "openai": "^4.16.1",
+    "patch-package": "^8.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.48.2",

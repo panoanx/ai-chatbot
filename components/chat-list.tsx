@@ -1,5 +1,3 @@
-import { ChatRequestOptions, type Message } from 'ai'
-
 import { Separator } from '@/components/ui/separator'
 import { ChatMessage } from '@/components/chat-message'
 import { UseChatHelpers } from 'ai/react/dist'
@@ -7,7 +5,6 @@ import toast from 'react-hot-toast'
 
 interface ChatListProps extends Pick<UseChatHelpers, 'messages' | 'isLoading'> {
   id?: string
-  chatOptions?: ChatRequestOptions
   isShared?: boolean
   editMessage?: ({ content, index }: { content: string; index: number }) => void
 }

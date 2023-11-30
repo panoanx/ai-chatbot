@@ -8,7 +8,7 @@ import { Button, type ButtonProps } from '@/components/ui/button'
 import { IconArrowDown } from '@/components/ui/icons'
 
 export function ButtonScrollToBottom({ className, ...props }: ButtonProps) {
-  const isAtBottom = useAtBottom(50)
+  const isAtBottom = useAtBottom(400)
 
   return (
     <Button
