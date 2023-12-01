@@ -20,6 +20,7 @@ export interface SettingsOptions {
   topP: number
   jsonMode: boolean
   defaultModel: ModelValueType
+  currentChatModel: ModelValueType
 }
 
 interface SettingsContextProps {
@@ -31,7 +32,8 @@ const defaultSettings: SettingsOptions = {
   temperature: 0.7,
   topP: 1,
   jsonMode: false,
-  defaultModel: 'gpt-3.5-turbo-16k'
+  defaultModel: 'gpt-3.5-turbo-16k',
+  currentChatModel: 'gpt-3.5-turbo-16k'
 }
 
 export const SettingsContext = React.createContext<SettingsContextProps>({

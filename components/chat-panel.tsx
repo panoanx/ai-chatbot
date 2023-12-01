@@ -24,6 +24,8 @@ export interface ChatPanelProps
   id?: string
   model: string
   setModel: (value: string) => void
+  isVision?: boolean
+  setIsVision?: (isVision: boolean) => void
   setPromptFormHeight?: (height: number) => void
 }
 
@@ -38,23 +40,10 @@ export function ChatPanel({
   messages,
   model,
   setModel,
-  setPromptFormHeight,
+  isVision,
+  setIsVision,
+  setPromptFormHeight
 }: ChatPanelProps) {
-  const isVisionMessages = (messages: Message[]) =>
-    messages.some(
-      message =>
-        message.role === 'user' &&
-        message.image_urls &&
-        message.image_urls.length > 0 &&
-        message.image_urls?.every(url => url.trim())
-    )
-  const [isVision, setIsVision] = useState(isVisionMessages(messages))
-  const [isCurrentVision, setIsCurrentVision] = useState(false)
-
-  React.useEffect(() => {
-    setIsVision(isVisionMessages(messages) || isCurrentVision)
-  }, [messages, isCurrentVision])
-
   return (
     <div
       className={cn(
@@ -102,19 +91,17 @@ export function ChatPanel({
         <div className="space-y-4 border-t bg-background px-4 py-3 shadow-lg sm:rounded-t-xl sm:border md:py-4">
           <PromptForm
             onSubmit={async ({ text, image_urls }) => {
-              await append(
-                {
-                  id,
-                  content: text,
-                  image_urls: image_urls,
-                  role: 'user'
-                },
-              )
+              await append({
+                id,
+                content: text,
+                image_urls: image_urls,
+                role: 'user'
+              })
             }}
             input={input}
             setInput={setInput}
             isLoading={isLoading}
-            setIsVision={setIsCurrentVision}
+            setIsVision={setIsVision}
             setPromptFormHeight={setPromptFormHeight}
           />
           {/* <FooterText className="hidden sm:block" /> */}

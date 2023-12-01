@@ -35,6 +35,7 @@ export interface ChatMessageProps {
   }) => void
   isLoading?: boolean
   isShared?: boolean
+  setIsCurrentVision?: (isVision: boolean) => void
 }
 
 export function ChatMessage({
@@ -43,6 +44,7 @@ export function ChatMessage({
   editMessage,
   isLoading,
   isShared,
+  setIsCurrentVision,
   ...props
 }: ChatMessageProps) {
   const [isEditing, setIsEditing] = React.useState(false)
@@ -116,6 +118,7 @@ export function ChatMessage({
             setInput={setInput}
             isLoading={isLoading || false}
             initialImageUrls={message.image_urls || []}
+            setIsVision={setIsCurrentVision}
           />
         ) : (
           <MemoizedReactMarkdown

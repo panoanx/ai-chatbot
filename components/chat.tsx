@@ -57,7 +57,7 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
   } = useChat({
     initialMessages,
     id,
-    sendExtraMessageFields : true, // for sending image_urls
+    sendExtraMessageFields: true, // for sending image_urls
     body: {
       id,
       previewToken,
@@ -76,6 +76,11 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
       }
     }
   })
+
+  useEffect(() => {
+    messages.filter(message => message.role === 'user').length > 0 &&
+      setModel(settings.currentChatModel)
+  }, [messages, settings.currentChatModel])
 
   const isAtBottom = useAtBottom(128)
   useEffect(() => {
@@ -98,6 +103,27 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
     })
   }
 
+  const isVisionMessages = (messages: Message[]) =>
+    messages.some(
+      message =>
+        message.role === 'user' &&
+        message.image_urls &&
+        message.image_urls.length > 0 &&
+        message.image_urls?.every(url => url.trim())
+    )
+  const [isVision, setIsVision] = useState(isVisionMessages(messages))
+  const [isCurrentVision, setIsCurrentVision] = useState(false)
+
+  useEffect(() => {
+    setIsVision(isVisionMessages(messages) || isCurrentVision)
+  }, [messages, input, isCurrentVision])
+
+  useEffect(() => {
+    if (!isVision) {
+      setModel(settings.currentChatModel)
+    }
+  }, [isVision, settings.currentChatModel])
+
   return (
     <>
       <div
@@ -111,6 +137,7 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
                 messages={messages}
                 isLoading={isLoading}
                 editMessage={editMessage}
+                setIsCurrentVision={setIsCurrentVision}
               />
               <ChatScrollAnchor trackVisibility={isLoading} />
             </>
@@ -131,6 +158,8 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
         model={model}
         setModel={setModel}
         setPromptFormHeight={setPromptFormHeight}
+        setIsVision={setIsCurrentVision}
+        isVision={isVision}
       />
 
       <Dialog open={previewTokenDialog} onOpenChange={setPreviewTokenDialog}>

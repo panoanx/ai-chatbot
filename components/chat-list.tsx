@@ -7,9 +7,16 @@ interface ChatListProps extends Pick<UseChatHelpers, 'messages' | 'isLoading'> {
   id?: string
   isShared?: boolean
   editMessage?: ({ content, index }: { content: string; index: number }) => void
+  setIsCurrentVision?: (isVision: boolean) => void
 }
 
-export function ChatList({ messages, isLoading, isShared, editMessage }: ChatListProps) {
+export function ChatList({
+  messages,
+  isLoading,
+  isShared,
+  editMessage,
+  setIsCurrentVision
+}: ChatListProps) {
   if (!messages.length) {
     return null
   }
@@ -24,6 +31,7 @@ export function ChatList({ messages, isLoading, isShared, editMessage }: ChatLis
             index={index}
             isLoading={isLoading}
             isShared={isShared}
+            setIsCurrentVision={setIsCurrentVision}
           />
           {index < messages.length - 1 && (
             <Separator className="my-4 md:my-8" />

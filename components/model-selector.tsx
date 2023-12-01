@@ -25,6 +25,7 @@ import {
   PopoverContent,
   PopoverTrigger
 } from '@/components/ui/popover'
+import { SettingsContext } from './settings'
 
 interface groupOptions {
   desc: string
@@ -78,7 +79,7 @@ type ModelGroupType = keyof typeof modelOptions
 export const modelValues = Object.values(modelOptions)
   .map(group => group.models.map(model => model.value))
   .flat()
-export type ModelValueType = typeof modelValues[number]
+export type ModelValueType = (typeof modelValues)[number]
 
 interface ModelSelectorProps {
   model: string
@@ -103,6 +104,7 @@ export default function ModelSelector({
       : Object.entries(modelOptions)
 
   // if model does not belong to modelGroups, set it to the first model in filtered model option
+  const { settings, setSettingsWrapper } = useContext(SettingsContext)
   useEffect(() => {
     const valueExists = (value: string): boolean => {
       return modelGroups.some(([_, group]) =>
@@ -110,9 +112,10 @@ export default function ModelSelector({
       )
     }
     if (!valueExists(model)) {
+      setSettingsWrapper({ currentChatModel: model })
       setModel(modelGroups[0][1].models[0].value)
     }
-  }, [model, modelGroups, setModel])
+  }, [model, modelGroups, setModel, setSettingsWrapper])
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
