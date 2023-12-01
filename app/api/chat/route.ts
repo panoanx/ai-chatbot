@@ -1,7 +1,12 @@
 'use server'
 
 import { kv } from '@vercel/kv'
-import { OpenAIStream, StreamingTextResponse, streamToResponse } from 'ai'
+import {
+  Message,
+  OpenAIStream,
+  StreamingTextResponse,
+  streamToResponse
+} from 'ai'
 import OpenAI from 'openai'
 
 import { HttpsProxyAgent } from 'https-proxy-agent'
@@ -9,7 +14,10 @@ import { HttpsProxyAgent } from 'https-proxy-agent'
 import { auth } from '@/lib/auth'
 import { nanoid } from '@/lib/utils'
 import { SettingsOptions } from '@/components/settings'
-import { ChatCompletionContentPartImage } from 'openai/resources'
+import {
+  ChatCompletionContentPartImage,
+  ChatCompletionMessageParam
+} from 'openai/resources'
 
 // export const runtime = 'edge'
 
@@ -41,7 +49,18 @@ export async function POST(req: Request) {
   const createParams: OpenAI.Chat.Completions.ChatCompletionCreateParams = {
     stream: true,
     model: model,
-    messages: structuredClone(messages), // deep copy!
+    messages: structuredClone(
+      // deep copy
+      messages.map(({ role, content, name, function_call }: Message) => ({
+        role,
+        content,
+        ...(name !== void 0 && { name }),
+        ...(function_call !== void 0 && {
+          function_call
+        })
+      }))
+    ) as Array<ChatCompletionMessageParam>,
+    // messages: messages,
     temperature,
     top_p
   }
@@ -49,29 +68,28 @@ export async function POST(req: Request) {
   // override the last message if it's a user message and there are images
   // caution: only message sent to the api is modified, not the original one
   // the original one will keep the frontend manner
-  if (
-    messages[messages.length - 1].role === 'user' &&
-    image_urls.length > 0 &&
-    model.includes('vision')
-  ) {
-    const textContent = {
-      type: 'text',
-      text: messages[messages.length - 1].content
+  for (let i = 0; i < messages.length; i++) {
+    if (
+      messages[i].role === 'user' &&
+      messages[i].image_urls &&
+      messages[i].image_urls.length > 0 &&
+      model.includes('vision')
+    ) {
+      const textContent = {
+        type: 'text',
+        text: messages[i].content
+      }
+      const imageContent = messages[i].image_urls.map(
+        (url: string) =>
+          ({
+            type: 'image_url',
+            image_url: {
+              url: url
+            }
+          } as ChatCompletionContentPartImage)
+      )
+      createParams.messages[i].content = [textContent, ...imageContent]
     }
-    const imageContent = image_urls.map(
-      (url: string) =>
-        ({
-          type: 'image_url',
-          image_url: {
-            url: url
-          }
-        } as ChatCompletionContentPartImage)
-    )
-    createParams.messages[messages.length - 1].content = [
-      textContent,
-      ...imageContent
-    ]
-    messages[messages.length - 1].image_urls = image_urls
   }
 
   // TODO: temporary fix for the openai api bug
