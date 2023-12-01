@@ -17,6 +17,7 @@ import { Settings, Settings2 } from 'lucide-react'
 import { GearIcon } from '@radix-ui/react-icons'
 import { ImageUploader } from './image-uploader'
 import Image from 'next/image'
+import { useAtBottom } from '@/lib/hooks/use-at-bottom'
 
 export interface PromptProps
   extends Pick<UseChatHelpers, 'input' | 'setInput'> {
@@ -30,6 +31,7 @@ export interface PromptProps
   isLoading: boolean
   initialImageUrls?: string[]
   setIsVision?: (isVision: boolean) => void
+  setPromptFormHeight?: (height: number) => void
 }
 
 export function PromptForm({
@@ -38,7 +40,8 @@ export function PromptForm({
   setInput,
   isLoading,
   initialImageUrls,
-  setIsVision
+  setIsVision,
+  setPromptFormHeight
 }: PromptProps) {
   const { formRef, onKeyDown } = useEnterSubmit()
   const inputRef = React.useRef<HTMLTextAreaElement>(null)
@@ -66,6 +69,14 @@ export function PromptForm({
       }
     }
   }, [imageUrls, setIsVision])
+
+  React.useEffect(() => {
+    if (setPromptFormHeight) {
+      if (formRef.current) {
+        setPromptFormHeight(formRef.current.clientHeight)
+      }
+    }
+  })
 
   const handlePaste = React.useCallback(
     (event: React.ClipboardEvent) => {
@@ -143,6 +154,15 @@ export function PromptForm({
                 sizes="100vw"
                 alt=""
                 className="h-auto max-h-32 w-auto rounded shadow-md"
+                onLoadingComplete={
+                  setPromptFormHeight
+                    ? () => {
+                        if (formRef.current) {
+                          setPromptFormHeight(formRef.current.clientHeight)
+                        }
+                      }
+                    : undefined
+                }
               />
               <div className="absolute right-1 top-1">
                 <Button

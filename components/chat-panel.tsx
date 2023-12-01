@@ -24,6 +24,7 @@ export interface ChatPanelProps
   id?: string
   model: string
   setModel: (value: string) => void
+  setPromptFormHeight?: (height: number) => void
 }
 
 export function ChatPanel({
@@ -36,7 +37,8 @@ export function ChatPanel({
   setInput,
   messages,
   model,
-  setModel
+  setModel,
+  setPromptFormHeight,
 }: ChatPanelProps) {
   const isVisionMessages = (messages: Message[]) =>
     messages.some(
@@ -118,6 +120,7 @@ export function ChatPanel({
             setInput={setInput}
             isLoading={isLoading}
             setIsVision={setIsCurrentVision}
+            setPromptFormHeight={setPromptFormHeight}
           />
           {/* <FooterText className="hidden sm:block" /> */}
         </div>

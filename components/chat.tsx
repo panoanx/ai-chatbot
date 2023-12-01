@@ -16,7 +16,7 @@ import {
   DialogHeader,
   DialogTitle
 } from '@/components/ui/dialog'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { toast } from 'react-hot-toast'
@@ -24,6 +24,7 @@ import { usePathname, useRouter } from 'next/navigation'
 
 import { ChatRequestOptions } from 'ai'
 import { SettingsContext } from './settings'
+import { useAtBottom } from '@/lib/hooks/use-at-bottom'
 
 const IS_PREVIEW = process.env.VERCEL_ENV === 'preview'
 
@@ -43,6 +44,7 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
   const [previewTokenInput, setPreviewTokenInput] = useState(previewToken ?? '')
   const { settings } = useContext(SettingsContext)
   const [model, setModel] = useState(settings.defaultModel)
+  const [promptFormHeight, setPromptFormHeight] = useState(0)
   const {
     messages,
     append,
@@ -74,6 +76,14 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
     }
   })
 
+  const isAtBottom = useAtBottom(128)
+  useEffect(() => {
+    if (isAtBottom) {
+      console.log(isAtBottom, promptFormHeight)
+      window.scrollTo({ top: document.body.offsetHeight, behavior: 'smooth' })
+    }
+  }, [isAtBottom, promptFormHeight])
+
   async function editMessage({ content = '', index = -1 }) {
     if (index === -1) return toast.error('Error editing message')
 
@@ -87,7 +97,10 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
 
   return (
     <>
-      <div className={cn('flex-1 pb-[500px] pt-4 md:pt-10', className)}>
+      <div
+        className={cn('flex-1  pt-4 md:pt-10', className)}
+        style={{ paddingBottom: `${promptFormHeight + 80}px` }}
+      >
         <div>
           {messages.length ? (
             <>
@@ -114,6 +127,7 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
         setInput={setInput}
         model={model}
         setModel={setModel}
+        setPromptFormHeight={setPromptFormHeight}
       />
 
       <Dialog open={previewTokenDialog} onOpenChange={setPreviewTokenDialog}>
