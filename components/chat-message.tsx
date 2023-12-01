@@ -24,7 +24,15 @@ import Image from 'next/image'
 export interface ChatMessageProps {
   message: Message
   index: number
-  editMessage?: ({ content, index }: { content: string; index: number }) => void
+  editMessage?: ({
+    content,
+    image_urls,
+    index
+  }: {
+    content: string
+    image_urls: string[]
+    index: number
+  }) => void
   isLoading?: boolean
   isShared?: boolean
 }
@@ -101,7 +109,7 @@ export function ChatMessage({
             onSubmit={async ({ text, image_urls }) => {
               setIsEditing(false)
               if (editMessage) {
-                await editMessage({ content: text, index })
+                await editMessage({ content: text, image_urls, index })
               }
             }}
             input={input}

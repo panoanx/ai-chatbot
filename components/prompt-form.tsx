@@ -121,7 +121,7 @@ export function PromptForm({
           rows={1}
           value={input}
           onChange={e => setInput(e.target.value)}
-          placeholder="Send a message."
+          placeholder="Send a message, or paste a image."
           spellCheck={false}
           onPaste={handlePaste}
           className="max-h-60 min-h-[60px] w-full resize-none bg-transparent px-2 py-[1.3rem] focus-within:outline-none sm:text-sm"

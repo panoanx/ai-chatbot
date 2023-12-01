@@ -84,15 +84,16 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
       window.scrollTo({ top: document.body.offsetHeight, behavior: 'smooth' })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAtBottom, promptFormHeight])
+  }, [promptFormHeight])
 
-  async function editMessage({ content = '', index = -1 }) {
+  async function editMessage({ content = '', image_urls = [''], index = -1 }) {
     if (index === -1) return toast.error('Error editing message')
 
     setMessages(messages.slice(0, index))
     return await append({
       id,
       content: content,
+      image_urls: image_urls,
       role: 'user'
     })
   }

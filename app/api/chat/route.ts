@@ -42,9 +42,6 @@ export async function POST(req: Request) {
   const { messages, previewToken, model, settings } = json
 
   const { temperature, topP: top_p, jsonMode } = settings as SettingsOptions
-  const image_urls = json.data?.encoded_image_urls
-    ? JSON.parse(json.data.encoded_image_urls)
-    : ([] as string[])
 
   const createParams: OpenAI.Chat.Completions.ChatCompletionCreateParams = {
     stream: true,

@@ -109,11 +109,6 @@ export function ChatPanel({
                   image_urls: image_urls,
                   role: 'user'
                 },
-                {
-                  data: {
-                    encoded_image_urls: JSON.stringify(image_urls)
-                  }
-                }
               )
             }}
             input={input}
