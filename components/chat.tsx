@@ -7,7 +7,7 @@ import { ChatList } from '@/components/chat-list'
 import { ChatPanel } from '@/components/chat-panel'
 import { EmptyScreen } from '@/components/empty-screen'
 import { ChatScrollAnchor } from '@/components/chat-scroll-anchor'
-import { useLocalStorage } from '@/lib/hooks/use-local-storage'
+import { useLocalStorage } from '@uidotdev/usehooks'
 import {
   Dialog,
   DialogContent,
@@ -43,7 +43,7 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
   const [previewTokenDialog, setPreviewTokenDialog] = useState(IS_PREVIEW)
   const [previewTokenInput, setPreviewTokenInput] = useState(previewToken ?? '')
   const { settings } = useContext(SettingsContext)
-  const [model, setModel] = useState(settings.defaultModel)
+  const [model, setModel] = useState(settings.currentChatModel)
   const [promptFormHeight, setPromptFormHeight] = useState(0)
   const {
     messages,
@@ -76,20 +76,31 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
       }
     }
   })
-
+  const isVisionMessages = (messages: Message[]) =>
+    messages.some(
+      message =>
+        message.role === 'user' &&
+        message.image_urls &&
+        message.image_urls.length > 0 &&
+        message.image_urls?.every(url => url.trim())
+    )
+  const [isVision, setIsVision] = useState(isVisionMessages(messages))
+  const [isCurrentVision, setIsCurrentVision] = useState(false)
   useEffect(() => {
-    messages.filter(message => message.role === 'user').length > 0 &&
+    if (!isVision) {
       setModel(settings.currentChatModel)
-  }, [messages, settings.currentChatModel])
-
-  const isAtBottom = useAtBottom(128)
-  useEffect(() => {
-    if (isAtBottom) {
-      // console.log(isAtBottom, promptFormHeight)
-      window.scrollTo({ top: document.body.offsetHeight, behavior: 'smooth' })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [promptFormHeight])
+  }, [isVision, settings.currentChatModel])
+
+  useEffect(() => {
+    messages.filter(message => message.role === 'user').length > 0
+      ? setModel(settings.currentChatModel)
+      : setModel(settings.defaultModel)
+  }, [messages, settings])
+
+  useEffect(() => {
+    setIsVision(isVisionMessages(messages) || isCurrentVision)
+  }, [messages, input, isCurrentVision])
 
   async function editMessage({ content = '', image_urls = [''], index = -1 }) {
     if (index === -1) return toast.error('Error editing message')
@@ -102,27 +113,14 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
       role: 'user'
     })
   }
-
-  const isVisionMessages = (messages: Message[]) =>
-    messages.some(
-      message =>
-        message.role === 'user' &&
-        message.image_urls &&
-        message.image_urls.length > 0 &&
-        message.image_urls?.every(url => url.trim())
-    )
-  const [isVision, setIsVision] = useState(isVisionMessages(messages))
-  const [isCurrentVision, setIsCurrentVision] = useState(false)
-
+  const isAtBottom = useAtBottom(128)
   useEffect(() => {
-    setIsVision(isVisionMessages(messages) || isCurrentVision)
-  }, [messages, input, isCurrentVision])
-
-  useEffect(() => {
-    if (!isVision) {
-      setModel(settings.currentChatModel)
+    if (isAtBottom) {
+      // console.log(isAtBottom, promptFormHeight)
+      window.scrollTo({ top: document.body.offsetHeight, behavior: 'smooth' })
     }
-  }, [isVision, settings.currentChatModel])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [promptFormHeight])
 
   return (
     <>

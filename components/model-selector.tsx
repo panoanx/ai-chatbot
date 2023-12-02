@@ -111,6 +111,7 @@ export default function ModelSelector({
         group.models.some((model: any) => model.value === value)
       )
     }
+    setSettingsWrapper({ currentChatModel: model })
     if (!valueExists(model)) {
       setSettingsWrapper({ currentChatModel: model })
       setModel(modelGroups[0][1].models[0].value)
