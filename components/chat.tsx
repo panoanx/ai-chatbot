@@ -7,7 +7,7 @@ import { ChatList } from '@/components/chat-list'
 import { ChatPanel } from '@/components/chat-panel'
 import { EmptyScreen } from '@/components/empty-screen'
 import { ChatScrollAnchor } from '@/components/chat-scroll-anchor'
-import { useLocalStorage } from '@uidotdev/usehooks'
+import { useLocalStorage } from 'usehooks-ts'
 import {
   Dialog,
   DialogContent,
@@ -71,7 +71,7 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
     },
     onFinish() {
       if (!path.includes('chat')) {
-        router.push(`/chat/${id}`)
+        router.push(`/chat/${id}`, { shallow: true })
         router.refresh()
       }
     }

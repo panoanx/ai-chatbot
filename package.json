@@ -27,7 +27,6 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-switch": "^1.0.3",
     "@radix-ui/react-tooltip": "^1.0.7",
-    "@uidotdev/usehooks": "^2.4.1",
     "@vercel/analytics": "^1.1.1",
     "@vercel/kv": "^0.2.4",
     "@vercel/og": "^0.5.20",
@@ -42,7 +41,7 @@
     "lucide-react": "^0.291.0",
     "nanoid": "^4.0.2",
     "net": "^1.0.2",
-    "next": "14.0.1",
+    "next": "^14.0.3",
     "next-auth": "5.0.0-beta.3",
     "next-themes": "^0.2.1",
     "openai": "^4.16.1",
@@ -58,7 +57,8 @@
     "rehype-katex": "^7.0.0",
     "remark-gfm": "^3.0.1",
     "remark-math": "^5.1.1",
-    "tls": "^0.0.1"
+    "tls": "^0.0.1",
+    "usehooks-ts": "^2.9.1"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.10",
