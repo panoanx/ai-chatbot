@@ -25,6 +25,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { ChatRequestOptions } from 'ai'
 import { SettingsContext } from './settings'
 import { useAtBottom } from '@/lib/hooks/use-at-bottom'
+import { ModelGroupType, modelOptions } from './model-selector'
 
 const IS_PREVIEW = process.env.VERCEL_ENV === 'preview'
 
@@ -42,7 +43,7 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
   )
   const [previewTokenDialog, setPreviewTokenDialog] = useState(IS_PREVIEW)
   const [previewTokenInput, setPreviewTokenInput] = useState(previewToken ?? '')
-  const { settings } = useContext(SettingsContext)
+  const { settings, setSettingsWrapper } = useContext(SettingsContext)
   const [model, setModel] = useState(settings.currentChatModel)
   const [promptFormHeight, setPromptFormHeight] = useState(0)
   const {
@@ -84,23 +85,50 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
         message.image_urls.length > 0 &&
         message.image_urls?.every(url => url.trim())
     )
-  const [isVision, setIsVision] = useState(isVisionMessages(messages))
+  const [isVision, protectedSetIsVision] = useState(isVisionMessages(messages))
   const [isCurrentVision, setIsCurrentVision] = useState(false)
+  const [isFirstRender, setIsFirstRender] = useState(true)
+
   useEffect(() => {
-    if (!isVision) {
-      setModel(settings.currentChatModel)
+    if (isFirstRender) {
+      setIsFirstRender(false)
+      messages.filter(message => message.role === 'user').length > 0
+        ? setModel(settings.currentChatModel)
+        : setModel(settings.defaultModel)
+      return
     }
-  }, [isVision, settings.currentChatModel])
+  }, [isFirstRender, messages, settings])
 
   useEffect(() => {
-    messages.filter(message => message.role === 'user').length > 0
-      ? setModel(settings.currentChatModel)
-      : setModel(settings.defaultModel)
-  }, [messages, settings])
-
-  useEffect(() => {
-    setIsVision(isVisionMessages(messages) || isCurrentVision)
-  }, [messages, input, isCurrentVision])
+    const _isVision = isVisionMessages(messages) || isCurrentVision
+    if (isVision !== _isVision) {
+      protectedSetIsVision(_isVision)
+      if (_isVision === false)
+        setModel(settings.currentChatModel ?? settings.defaultModel)
+      else if (_isVision === true) {
+        const modelTypes = _isVision ? ['vision'] : []
+        const modelGroups =
+          modelTypes && modelTypes.length > 0
+            ? Object.entries(modelOptions).filter(([group]) =>
+                modelTypes.includes(group as ModelGroupType)
+              )
+            : Object.entries(modelOptions)
+        const valueExists = (value: string): boolean => {
+          return modelGroups.some(([_, group]) =>
+            group.models.some((model: any) => model.value === value)
+          )
+        }
+        if (!valueExists(model)) {
+          setModel(modelGroups[0][1].models[0].value)
+        }
+      }
+    } else if (isVision === _isVision) {
+      if (isVision === false) {
+        setSettingsWrapper({ currentChatModel: model })
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [messages, isCurrentVision, isVision, model])
 
   async function editMessage({ content = '', image_urls = [''], index = -1 }) {
     if (index === -1) return toast.error('Error editing message')

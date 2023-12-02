@@ -75,7 +75,7 @@ const CommandDescription = ({
   )
 }
 
-type ModelGroupType = keyof typeof modelOptions
+export type ModelGroupType = keyof typeof modelOptions
 export const modelValues = Object.values(modelOptions)
   .map(group => group.models.map(model => model.value))
   .flat()
@@ -105,18 +105,18 @@ export default function ModelSelector({
 
   // if model does not belong to modelGroups, set it to the first model in filtered model option
   const { settings, setSettingsWrapper } = useContext(SettingsContext)
-  useEffect(() => {
-    const valueExists = (value: string): boolean => {
-      return modelGroups.some(([_, group]) =>
-        group.models.some((model: any) => model.value === value)
-      )
-    }
-    setSettingsWrapper({ currentChatModel: model })
-    if (!valueExists(model)) {
-      setSettingsWrapper({ currentChatModel: model })
-      setModel(modelGroups[0][1].models[0].value)
-    }
-  }, [model, modelGroups, setModel, setSettingsWrapper])
+  // useEffect(() => {
+  //   const valueExists = (value: string): boolean => {
+  //     return modelGroups.some(([_, group]) =>
+  //       group.models.some((model: any) => model.value === value)
+  //     )
+  //   }
+  //   setSettingsWrapper({ currentChatModel: model })
+  //   if (!valueExists(model)) {
+  //     setSettingsWrapper({ currentChatModel: model })
+  //     setModel(modelGroups[0][1].models[0].value)
+  //   }
+  // }, [model, modelGroups, setModel, setSettingsWrapper])
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
