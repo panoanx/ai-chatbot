@@ -1,5 +1,8 @@
 import { auth } from '@/lib/auth'
-import { LoginButton } from '@/components/login-button'
+import {
+  AuthentikLoginButton,
+  GoogleLoginButton
+} from '@/components/login-button'
 import { redirect } from 'next/navigation'
 
 export default async function SignInPage() {
@@ -9,8 +12,11 @@ export default async function SignInPage() {
     redirect('/')
   }
   return (
-    <div className="flex h-[calc(100vh-theme(spacing.16))] items-center justify-center py-10">
-      <LoginButton className="py-5 text-base" />
+    <div className="flex h-[calc(100vh-theme(spacing.16))]  items-center justify-center py-10">
+      <div className='flex flex-col space-y-2'>
+        <AuthentikLoginButton className="py-5 text-base" />
+        <GoogleLoginButton className="py-5 text-base" />
+      </div>
     </div>
   )
 }

@@ -23,8 +23,8 @@ import {
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
-  httpAgent: process.env.PROXY_URL
-    ? new HttpsProxyAgent(process.env.PROXY_URL)
+  httpAgent: process.env.http_proxy
+    ? new HttpsProxyAgent(process.env.http_proxy)
     : undefined
 })
 

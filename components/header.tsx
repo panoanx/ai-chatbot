@@ -8,7 +8,7 @@ import { Button, buttonVariants } from '@/components/ui/button'
 import { MobileNav } from '@/components/nav/mobile-nav'
 
 import { UserMenu } from '@/components/user-menu'
-import { LoginButton } from '@/components/login-button'
+import { AuthentikLoginButton } from '@/components/login-button'
 import Navbar from './nav/navbar'
 import { SidebarToggleButton } from './nav/sidebar-toggle'
 import { Settings } from './settings'
