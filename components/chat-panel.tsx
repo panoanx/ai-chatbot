@@ -47,11 +47,11 @@ export function ChatPanel({
   return (
     <div
       className={cn(
-        'fixed inset-x-0 bottom-0 w-full bg-gradient-to-b from-transparent to-background/80 duration-300 ease-in-out animate-in dark:from-transparent dark:to-background/80 peer-[[data-state=open]]:group-[]:lg:pl-[250px] peer-[[data-state=open]]:group-[]:xl:pl-[300px]'
+        'fixed inset-x-0 bottom-0 w-full bg-gradient-to-b from-transparent to-background/80 duration-300 ease-in-out animate-in dark:from-transparent dark:to-background/80 peer-[[data-state=open]]:group-[]:lg:pl-[250px] peer-[[data-state=open]]:group-[]:xl:pl-[300px] peer-[[data-state=open]]:group-[]:2xl:pl-[380px]'
       )}
     >
       <ButtonScrollToBottom />
-      <div className="mx-auto sm:max-w-[55rem] sm:px-4">
+      <div className="mx-auto sm:max-w-[58rem] sm:px-4 xl:pr-10">
         <div className="flex h-12 items-center justify-center">
           {isLoading ? (
             <Button

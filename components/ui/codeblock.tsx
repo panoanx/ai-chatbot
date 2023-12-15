@@ -10,6 +10,7 @@ import { coldarkDark } from 'react-syntax-highlighter/dist/cjs/styles/prism'
 import { useCopyToClipboard } from '@/lib/hooks/use-copy-to-clipboard'
 import { IconCheck, IconCopy, IconDownload } from '@/components/ui/icons'
 import { Button } from '@/components/ui/button'
+import { coldarkCold } from 'react-syntax-highlighter/dist/esm/styles/prism'
 
 interface Props {
   language: string
@@ -56,6 +57,93 @@ export const generateRandomString = (length: number, lowercase = false) => {
   return lowercase ? result.toLowerCase() : result
 }
 
+function preprocessCode(code: string) {
+  let skippedLeadingEmptyLines = false
+  let lastNonEmptyLineIndex = 0
+  let minRawStringIndentation = Number.MAX_SAFE_INTEGER
+  let numberOfRemovedLines = 0
+
+  const processNonEmptyLine = (line: string, index: number) => {
+    // keep track of the index of the last non-empty line
+    lastNonEmptyLineIndex = index - numberOfRemovedLines
+    // determine the minimum indentation level
+    minRawStringIndentation = Math.min(
+      minRawStringIndentation,
+      Math.max(0, line.search(/\S/))
+    )
+    // return the processed line
+    return [line.trimEnd()]
+  }
+
+  // split code into lines
+  const codeLines = code.split('\n')
+
+  // remove empty lines, and process non-empty lines
+  const nonEmptyLinesAtStart = codeLines.flatMap((line, index) => {
+    if (!skippedLeadingEmptyLines) {
+      if (line.match(/^\s*$/)) {
+        numberOfRemovedLines += 1
+        return []
+      }
+
+      skippedLeadingEmptyLines = true
+      return processNonEmptyLine(line, index)
+    }
+
+    if (line.match(/^\s*$/)) return ['']
+
+    return processNonEmptyLine(line, index)
+  })
+
+  const nonEmptyLinesStartAndEnd = nonEmptyLinesAtStart.slice(
+    0,
+    lastNonEmptyLineIndex + 1
+  )
+
+  // If there are no non-empty lines, return an empty string
+  if (nonEmptyLinesStartAndEnd.length === 0) return ''
+
+  const nonRawStringIndentationLines =
+    minRawStringIndentation !== 0
+      ? nonEmptyLinesStartAndEnd.map(line =>
+          line.substring(minRawStringIndentation)
+        )
+      : nonEmptyLinesStartAndEnd
+
+  return nonRawStringIndentationLines.join('\n')
+}
+
+const customSyntaxHighlighter = (
+  language: string,
+  code: string,
+  style: {
+    [key: string]: React.CSSProperties
+  },
+  value: string
+) => (
+  <SyntaxHighlighter
+    language={language}
+    style={style}
+    PreTag="div"
+    showLineNumbers
+    // wrapLongLines={true}
+    customStyle={{
+      margin: 0,
+      width: '100%',
+      background: 'transparent',
+      padding: '0.5rem 0.5rem'
+    }}
+    codeTagProps={{
+      style: {
+        fontSize: '0.8rem',
+        fontFamily: 'var(--font-mono)'
+      }
+    }}
+  >
+    {value}
+  </SyntaxHighlighter>
+)
+
 const CodeBlock: FC<Props> = memo(({ language, value }) => {
   const { isCopied, copyToClipboard } = useCopyToClipboard({ timeout: 2000 })
 
@@ -93,13 +181,13 @@ const CodeBlock: FC<Props> = memo(({ language, value }) => {
   }
 
   return (
-    <div className="codeblock relative w-full rounded-md bg-zinc-950 font-sans">
-      <div className="flex w-full items-center justify-between rounded-t-md bg-zinc-800 px-6 py-0 pr-4 text-zinc-100">
-        <span className="text-xs lowercase">{language}</span>
+    <div className="codeblock relative w-full rounded-md bg-muted-foreground/10 font-sans">
+      <div className="flex w-full h-8 items-center bg-muted-foreground/20 justify-between rounded-t-md px-6 py-0 pr-4 ">
+        <span className="text-xs lowercase font-medium ">{language}</span>
         <div className="flex items-center space-x-1">
           <Button
             variant="ghost"
-            className="hover:bg-zinc-800 focus-visible:ring-1 focus-visible:ring-slate-700 focus-visible:ring-offset-0"
+            className="hover:bg-white/20 h-7 w-7 focus-visible:ring-1 focus-visible:ring-slate-700 focus-visible:ring-offset-0"
             onClick={downloadAsFile}
             size="icon"
           >
@@ -109,7 +197,7 @@ const CodeBlock: FC<Props> = memo(({ language, value }) => {
           <Button
             variant="ghost"
             size="icon"
-            className="text-xs hover:bg-zinc-800 focus-visible:ring-1 focus-visible:ring-slate-700 focus-visible:ring-offset-0"
+            className="hover:bg-white/20 w-7 h-7 focus-visible:ring-1 focus-visible:ring-slate-700 focus-visible:ring-offset-0"
             onClick={onCopy}
           >
             {isCopied ? <IconCheck /> : <IconCopy />}
@@ -117,26 +205,23 @@ const CodeBlock: FC<Props> = memo(({ language, value }) => {
           </Button>
         </div>
       </div>
-      <SyntaxHighlighter
-        language={language}
-        style={coldarkDark}
-        PreTag="div"
-        showLineNumbers
-        customStyle={{
-          margin: 0,
-          width: '100%',
-          background: 'transparent',
-          padding: '1.5rem 1rem'
-        }}
-        codeTagProps={{
-          style: {
-            fontSize: '0.9rem',
-            fontFamily: 'var(--font-mono)'
-          }
-        }}
-      >
-        {value}
-      </SyntaxHighlighter>
+      <div className="block dark:hidden">
+        {customSyntaxHighlighter(
+          language,
+          value,
+          coldarkCold,
+          preprocessCode(value)
+        )}
+      </div>
+
+      <div className="hidden dark:block">
+        {customSyntaxHighlighter(
+          language,
+          value,
+          coldarkDark,
+          preprocessCode(value)
+        )}
+      </div>
     </div>
   )
 })
