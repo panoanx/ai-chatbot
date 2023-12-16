@@ -16,8 +16,10 @@ import { nanoid } from '@/lib/utils'
 import { SettingsOptions } from '@/components/settings'
 import {
   ChatCompletionContentPartImage,
+  ChatCompletionContentPartText,
   ChatCompletionMessageParam
 } from 'openai/resources'
+import { imageGenerator } from './img-gen'
 
 // export const runtime = 'edge'
 
@@ -39,8 +41,13 @@ export async function POST(req: Request) {
   }
 
   const json = await req.json()
-  const { messages, previewToken, model, settings } = json
+  const { messages: _messages, previewToken, model, settings } = json
+  const messages: Array<Message> = _messages
 
+  // image generation models
+  if (model.includes('dall')) {
+    return await imageGenerator(json, model, settings)
+  }
   const { temperature, topP: top_p, jsonMode } = settings as SettingsOptions
 
   const createParams: OpenAI.Chat.Completions.ChatCompletionCreateParams = {
@@ -69,14 +76,15 @@ export async function POST(req: Request) {
     if (
       messages[i].role === 'user' &&
       messages[i].image_urls &&
+      // @ts-ignore
       messages[i].image_urls.length > 0 &&
       model.includes('vision')
     ) {
       const textContent = {
         type: 'text',
         text: messages[i].content
-      }
-      const imageContent = messages[i].image_urls.map(
+      } as ChatCompletionContentPartText
+      const imageContent = messages[i].image_urls?.map(
         (url: string) =>
           ({
             type: 'image_url',
@@ -85,7 +93,7 @@ export async function POST(req: Request) {
             }
           } as ChatCompletionContentPartImage)
       )
-      createParams.messages[i].content = [textContent, ...imageContent]
+      createParams.messages[i].content = [textContent, ...(imageContent ?? [])]
     }
   }
 
@@ -110,8 +118,6 @@ export async function POST(req: Request) {
 
   const res = await openai.chat.completions.create(createParams)
 
-  // TODO: remove this in future
-  // @ts-ignore
   const stream = OpenAIStream(res, {
     async onCompletion(completion) {
       const title = json.messages[0].content.substring(0, 100)
