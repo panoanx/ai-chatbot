@@ -101,7 +101,7 @@ export function ChatMessage({
                 height="0"
                 sizes="100vw"
                 alt=""
-                className="h-auto w-auto rounded"
+                className="h-auto w-auto rounded shadow"
               />
             ))}
           </div>
@@ -152,6 +152,20 @@ export function ChatMessage({
               // br() {
               //   return <br />
               // },
+              img({ src, alt }) {
+                return (
+                  <div className="relative">
+                    <Image
+                      src={src || ''}
+                      width="0"
+                      height="0"
+                      sizes="100vw"
+                      alt={alt || ''}
+                      className="not-prose h-auto w-auto rounded shadow"
+                    />
+                  </div>
+                )
+              },
               code({ node, inline, className, children, ...props }) {
                 if (children.length) {
                   if (children[0] == '▍') {

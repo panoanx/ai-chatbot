@@ -46,7 +46,7 @@ export async function POST(req: Request) {
 
   // image generation models
   if (model.includes('dall')) {
-    return await imageGenerator(json, model, settings)
+    return await imageGenerator(userId, json, model, settings)
   }
   const { temperature, topP: top_p, jsonMode } = settings as SettingsOptions
 

@@ -12,6 +12,7 @@ const openai = new OpenAI({
 })
 
 export async function imageGenerator(
+  userId: string,
   json: any,
   model: string,
   settings: SettingsOptions
@@ -33,9 +34,11 @@ export async function imageGenerator(
     size: '256x256'
   })
 
-//   const img_urls = imgs.data.map((img: any) => img.b64_json)
+  //   const img_urls = imgs.data.map((img: any) => img.b64_json)
   // decode base64 to image data url
-  const img_urls = imgs.data.map((img: any) => `data:image/png;base64,${img}`)
+  const img_urls = imgs.data.map(
+    (img: any) => `data:image/png;base64,${img.b64_json}`
+  )
 
   const sys_msg = {
     role: 'assistant',
@@ -44,7 +47,6 @@ export async function imageGenerator(
   } as Message
 
   const id = json.id ?? nanoid()
-  const userId = json.userId
   const createdAt = Date.now()
   const path = `/chat/${id}`
   const payload = {
@@ -56,12 +58,20 @@ export async function imageGenerator(
     messages: [...messages, sys_msg]
   }
 
-  await kv.hmset(`chat:${id}`, payload)
-  await kv.zadd(`user:chat:${userId}`, {
-    score: createdAt,
-    member: `chat:${id}`
-  })
+  try {
+    await kv.hmset(`chat:${id}`, payload)
+    await kv.zadd(`user:chat:${userId}`, {
+      score: createdAt,
+      member: `chat:${id}`
+    })
+  } catch (e) {
+    console.log(e)
+    return new Response('Error saving chat', {
+      status: 500
+    })
+  }
 
-  const markDownImg = img_urls.map(url => `![](${url})`).join('\n')
+  const markDownImg =
+    img_urls.map(url => `![](${url})`).join('\n') + sys_msg.content
   return new Response(markDownImg)
 }
