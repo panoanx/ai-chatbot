@@ -131,7 +131,8 @@ const customSyntaxHighlighter = (
       margin: 0,
       width: '100%',
       background: 'transparent',
-      padding: '0.5rem 0.5rem'
+      padding: '0.5rem 0.5rem',
+      lineHeight: '1.3'
     }}
     codeTagProps={{
       style: {
@@ -183,11 +184,11 @@ const CodeBlock: FC<Props> = memo(({ language, value }) => {
   return (
     <div className="codeblock relative w-full rounded-md bg-muted-foreground/10 font-sans">
       <div className="flex w-full h-8 items-center bg-muted-foreground/20 justify-between rounded-t-md px-6 py-0 pr-4 ">
-        <span className="text-xs lowercase font-medium ">{language}</span>
+        <span className="text-xs font-medium lowercase ">{language}</span>
         <div className="flex items-center space-x-1">
           <Button
             variant="ghost"
-            className="hover:bg-white/20 h-7 w-7 focus-visible:ring-1 focus-visible:ring-slate-700 focus-visible:ring-offset-0"
+            className="h-7 w-7 hover:bg-white/20 focus-visible:ring-1 focus-visible:ring-slate-700 focus-visible:ring-offset-0"
             onClick={downloadAsFile}
             size="icon"
           >
@@ -197,7 +198,7 @@ const CodeBlock: FC<Props> = memo(({ language, value }) => {
           <Button
             variant="ghost"
             size="icon"
-            className="hover:bg-white/20 w-7 h-7 focus-visible:ring-1 focus-visible:ring-slate-700 focus-visible:ring-offset-0"
+            className="h-7 w-7 hover:bg-white/20 focus-visible:ring-1 focus-visible:ring-slate-700 focus-visible:ring-offset-0"
             onClick={onCopy}
           >
             {isCopied ? <IconCheck /> : <IconCopy />}

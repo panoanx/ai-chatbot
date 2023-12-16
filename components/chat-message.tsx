@@ -122,33 +122,36 @@ export function ChatMessage({
           />
         ) : (
           <MemoizedReactMarkdown
-            className="prose dark:prose-invert prose-p:leading-relaxed prose-pre:p-0 break-words"
+            className="prose  break-words dark:prose-invert prose-h5:font-medium prose-h6:font-medium prose-p:leading-relaxed"
             remarkPlugins={[remarkGfm, remarkMath]}
             rehypePlugins={[rehypeKatex as any]}
             components={{
-              p({ children }) {
-                return <p className="mb-1 last:mb-0">{children}</p>
+              pre({ children }) {
+                return <pre className="not-prose mb-2">{children}</pre>
               },
-              ul({ children }) {
-                return (
-                  <ul className="mb-1 ml-8 list-outside list-disc last:mb-0">
-                    {children}
-                  </ul>
-                )
-              },
-              ol({ children }) {
-                return (
-                  <ol className="mb-1 ml-8 list-outside list-decimal last:mb-0">
-                    {children}
-                  </ol>
-                )
-              },
-              li({ children }) {
-                return <li className="mb-0.5">{children}</li>
-              },
-              br() {
-                return <br />
-              },
+              // p({ children }) {
+              //   return <p className="mb-1 last:mb-0">{children}</p>
+              // },
+              // ul({ children }) {
+              //   return (
+              //     <ul className="mb-1 ml-4 list-outside list-disc last:mb-0">
+              //       {children}
+              //     </ul>
+              //   )
+              // },
+              // ol({ children }) {
+              //   return (
+              //     <ol className="mb-1 ml-8 list-outside list-decimal last:mb-0">
+              //       {children}
+              //     </ol>
+              //   )
+              // },
+              // li({ children }) {
+              //   return <li className="mb-0.5">{children}</li>
+              // },
+              // br() {
+              //   return <br />
+              // },
               code({ node, inline, className, children, ...props }) {
                 if (children.length) {
                   if (children[0] == '▍') {

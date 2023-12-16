@@ -73,17 +73,10 @@ module.exports = {
         'accordion-up': 'accordion-up 0.2s ease-out'
       },
       fontFamily: {
-        sans: [
-          'var(--font-sans)',
-          'Noto Sans SC',
-          ...defaultTheme.fontFamily.sans
-        ],
+        sans: ['Inter', 'Noto Sans SC', ...defaultTheme.fontFamily.sans],
         mono: ['var(--font-mono)']
       }
     }
   },
-  plugins: [
-    require('tailwindcss-animate'),
-    require('@tailwindcss/typography'),
-  ]
+  plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography')]
 }
