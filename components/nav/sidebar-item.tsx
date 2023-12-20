@@ -45,7 +45,7 @@ export function SidebarItem({ chat, children }: SidebarItemProps) {
         href={chat.path}
         className={cn(
           buttonVariants({ variant: 'ghost' }),
-          'group w-full py-0 pl-8 pr-4 h-8 transition-colors hover:bg-zinc-200/40 dark:hover:bg-zinc-300/10',
+          'group h-8 w-full py-0 pl-8 pr-4 transition-colors hover:bg-zinc-200/40 dark:hover:bg-zinc-300/10',
           isActive &&  'bg-zinc-200 pr-16 font-semibold dark:bg-zinc-800'
         )}
       >
@@ -53,7 +53,7 @@ export function SidebarItem({ chat, children }: SidebarItemProps) {
           className="relative max-h-5 flex-1 select-none overflow-hidden text-ellipsis break-all"
           title={chat.title}
         >
-          <span className="text-left whitespace-nowrap">{chat.title}</span>
+          <span className="whitespace-nowrap text-left">{chat.title}</span>
         </div>
       </Link>
       {isActive && <div className="absolute right-2 top-1">{children}</div>}

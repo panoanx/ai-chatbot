@@ -141,14 +141,21 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
       role: 'user'
     })
   }
-  const isAtBottom = useAtBottom(128)
+const isAtBottom = useAtBottom(128)
   useEffect(() => {
-    if (isAtBottom || isLoading) {
+    if (isAtBottom && !isFirstRender) {
       // console.log(isAtBottom, promptFormHeight)
       window.scrollTo({ top: document.body.offsetHeight, behavior: 'smooth' })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [promptFormHeight, isAtBottom, messages])
+  }, [promptFormHeight])
+
+  useEffect(() => {
+    if (isLoading && !isFirstRender) {
+      window.scrollTo({ top: document.body.offsetHeight, behavior: 'instant' })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [messages, isLoading])
 
   return (
     <>

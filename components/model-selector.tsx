@@ -36,8 +36,7 @@ export const modelOptions: Record<string, groupOptions> = {
   chat: {
     desc: 'Chat',
     models: [
-      { label: 'GPT-3.5 16k', value: 'gpt-3.5-turbo-1106', hint: 'Turbo' },
-      // { label: 'GPT-3.5 16k', value: 'gpt-3.5-turbo-16k' },
+      { label: 'GPT-3.5 16k', value: 'gpt-3.5-turbo-16k', hint: 'Turbo' },
       { label: 'GPT-4', value: 'gpt-4', hint: 'Legacy' },
       { label: 'GPT-4 128K', value: 'gpt-4-1106-preview', hint: 'Turbo' }
     ]
@@ -103,6 +102,13 @@ export default function ModelSelector({
         )
       : Object.entries(modelOptions)
 
+  const [modelLabel, setModelLabel] = React.useState('Select model')
+
+  useEffect(() => {
+    const currentModelLabel = findModelByValue(model)?.found?.label
+    setModelLabel(currentModelLabel || 'Select model')
+  }, [model])
+
   // if model does not belong to modelGroups, set it to the first model in filtered model option
   const { settings, setSettingsWrapper } = useContext(SettingsContext)
   // useEffect(() => {
@@ -129,9 +135,7 @@ export default function ModelSelector({
           className="inline-flex h-8 w-[170px] items-center bg-background font-medium shadow"
         >
           <CubeIcon className="mr-2 h-4 w-4" />
-          <span className="flex-1">
-            {model ? findModelByValue(model)?.found?.label : 'Select model'}
-          </span>
+          <span className="flex-1">{modelLabel}</span>
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
