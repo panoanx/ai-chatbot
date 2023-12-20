@@ -143,12 +143,12 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
   }
   const isAtBottom = useAtBottom(128)
   useEffect(() => {
-    if (isAtBottom) {
+    if (isAtBottom || isLoading) {
       // console.log(isAtBottom, promptFormHeight)
       window.scrollTo({ top: document.body.offsetHeight, behavior: 'smooth' })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [promptFormHeight])
+  }, [promptFormHeight, isAtBottom, messages])
 
   return (
     <>

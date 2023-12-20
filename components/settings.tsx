@@ -14,6 +14,10 @@ import { Switch } from './ui/switch'
 import { ChatRequestOptions } from 'ai'
 import ModelSelector, { ModelValueType } from './model-selector'
 import { cn } from '@/lib/utils'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+
+const dalle2Sizes = ['256x256', '512x512', '1024x1024']
+const dalle3Sizes = ['1024x1024', '1792x1024', '1024x1792']
 
 export interface SettingsOptions {
   temperature: number
@@ -21,6 +25,13 @@ export interface SettingsOptions {
   jsonMode: boolean
   defaultModel: ModelValueType
   currentChatModel: ModelValueType
+  imgSize: {
+    // 'dall-e-2': '256x256' | '512x512' | '1024x1024'
+    // 'dall-e-3': '1024x1024' | '1792x1024' | '1024x1792'
+    'dall-e-2': string
+    'dall-e-3': string
+  }
+  imgNum: 1 | 2 | 3 | 4
 }
 
 interface SettingsContextProps {
@@ -33,7 +44,12 @@ const defaultSettings: SettingsOptions = {
   topP: 1,
   jsonMode: false,
   defaultModel: 'gpt-3.5-turbo-16k',
-  currentChatModel: 'gpt-3.5-turbo-16k'
+  currentChatModel: 'gpt-3.5-turbo-16k',
+  imgSize: {
+    'dall-e-2': dalle2Sizes[0],
+    'dall-e-3': dalle3Sizes[0]
+  },
+  imgNum: 1
 }
 
 export const SettingsContext = React.createContext<SettingsContextProps>({
@@ -86,6 +102,32 @@ function SwitchSetting({
   )
 }
 
+function ImageSizeSelector({
+  defaultValue,
+  values,
+  onValueChange
+}: {
+  defaultValue: string
+  values: string[]
+  onValueChange: (value: string) => void
+}) {
+  return (
+    <Tabs
+      defaultValue={defaultValue}
+      className=""
+      onValueChange={onValueChange}
+    >
+      <TabsList>
+        {values.map((value, index) => (
+          <TabsTrigger key={index} value={value}>
+            {value}
+          </TabsTrigger>
+        ))}
+      </TabsList>
+    </Tabs>
+  )
+}
+
 function SliderSetting({
   value,
   min,
@@ -127,10 +169,9 @@ function SliderSetting({
 }
 
 export function Settings({ className }: { className?: string }) {
-  const {
-    settings: { temperature, topP, jsonMode, defaultModel },
-    setSettingsWrapper
-  } = React.useContext(SettingsContext)
+  const { settings, setSettingsWrapper } = React.useContext(SettingsContext)
+  const { temperature, topP, jsonMode, defaultModel, imgSize, imgNum } =
+    settings
 
   return (
     <Popover>
@@ -203,6 +244,31 @@ export function Settings({ className }: { className?: string }) {
               label="Json Mode"
               description="Ensure output is valid JSON. Works only with turbo models."
             />
+          </div>
+          <div className="space-y-2">
+            <h4 className="font-medium leading-none">Image Generation</h4>
+            <p className="text-sm text-muted-foreground"></p>
+          </div>
+          <div className="grid gap-4">
+            <div className="flex justify-between">
+              <Label className="flex flex-col space-y-1">
+                <span>Image Size</span>
+                <span className=" text-xs text-muted-foreground">
+                  Size of the generated image.
+                </span>
+              </Label>
+            </div>
+            <div>
+              {/* <ImageSizeSelector
+                defaultValue={imgSize['dall-e-2']}
+                values={dalle2Sizes}
+                onValueChange={(value: string) => {
+                  setSettingsWrapper({
+                    imgSize: { ...imgSize, 'dall-e-2': value }
+                  })
+                }}
+              /> */}
+            </div>
           </div>
         </div>
       </PopoverContent>
