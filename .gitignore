@@ -17,6 +17,7 @@ build
 .DS_Store
 *.pem
 redis-data
+.idea
 
 # debug
 npm-debug.log*

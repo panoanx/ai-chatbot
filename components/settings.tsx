@@ -8,13 +8,12 @@ import { GearIcon } from '@radix-ui/react-icons'
 import { Button } from './ui/button'
 import { Label } from './ui/label'
 import { Slider } from './ui/slider'
-import React, { useEffect } from 'react'
-import { useLocalStorage } from 'usehooks-ts'
+import React from 'react'
+import { useLocalStorage } from '@/lib/hooks/use-local-storage'
 import { Switch } from './ui/switch'
-import { ChatRequestOptions } from 'ai'
 import ModelSelector, { ModelValueType } from './model-selector'
 import { cn } from '@/lib/utils'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 const dalle2Sizes = ['256x256', '512x512', '1024x1024']
 const dalle3Sizes = ['1024x1024', '1792x1024', '1024x1792']
@@ -63,7 +62,6 @@ export function SettingsContextProvider({
   children: React.ReactNode
 }) {
   const [settings, setSettings] = useLocalStorage('settings', defaultSettings)
-
   const setSettingsWrapper = (kv: Partial<SettingsOptions>) => {
     setSettings({ ...settings, ...kv })
   }
@@ -114,10 +112,10 @@ function ImageSizeSelector({
   return (
     <Tabs
       defaultValue={defaultValue}
-      className=""
+      className="w-4/5"
       onValueChange={onValueChange}
     >
-      <TabsList>
+      <TabsList className="grid w-full grid-cols-3">
         {values.map((value, index) => (
           <TabsTrigger key={index} value={value}>
             {value}
@@ -249,7 +247,7 @@ export function Settings({ className }: { className?: string }) {
             <h4 className="font-medium leading-none">Image Generation</h4>
             <p className="text-sm text-muted-foreground"></p>
           </div>
-          <div className="grid gap-4">
+          <div className="grid gap-2">
             <div className="flex justify-between">
               <Label className="flex flex-col space-y-1">
                 <span>Image Size</span>
@@ -258,16 +256,33 @@ export function Settings({ className }: { className?: string }) {
                 </span>
               </Label>
             </div>
-            <div>
-              {/* <ImageSizeSelector
-                defaultValue={imgSize['dall-e-2']}
-                values={dalle2Sizes}
-                onValueChange={(value: string) => {
-                  setSettingsWrapper({
-                    imgSize: { ...imgSize, 'dall-e-2': value }
-                  })
-                }}
-              /> */}
+            <div className="align-center flex items-center justify-between">
+              <Label className="text-center font-medium leading-none">
+                <span>DALL·E 2</span>
+              </Label>
+              <ImageSizeSelector
+                  defaultValue={imgSize['dall-e-2']}
+                  values={dalle2Sizes}
+                  onValueChange={(value: string) => {
+                    setSettingsWrapper({
+                      imgSize: {...imgSize, 'dall-e-2': value}
+                    })
+                  }}
+              />
+            </div>
+            <div className="align-center flex items-center justify-between">
+              <Label className="text-center font-medium leading-none">
+                <span>DALL·E 3</span>
+              </Label>
+              <ImageSizeSelector
+                  defaultValue={imgSize['dall-e-3']}
+                  values={dalle3Sizes}
+                  onValueChange={(value: string) => {
+                    setSettingsWrapper({
+                      imgSize: {...imgSize, 'dall-e-3': value}
+                    })
+                  }}
+              />
             </div>
           </div>
         </div>
