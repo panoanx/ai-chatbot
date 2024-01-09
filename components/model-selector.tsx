@@ -47,7 +47,10 @@ export const modelOptions: Record<string, groupOptions> = {
   },
   image: {
     desc: 'Image Generation',
-    models: [{ label: 'DALL-E 2', value: 'dall-e-2' }]
+    models: [
+      { label: 'DALL-E 2', value: 'dall-e-2' },
+      { label: 'DALL-E 3', value: 'dall-e-3' }
+    ]
   }
 }
 

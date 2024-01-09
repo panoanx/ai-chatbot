@@ -31,7 +31,7 @@ export async function imageGenerator(
     model: model,
     prompt: prompt,
     response_format: 'b64_json',
-    size: '256x256'
+    size: settings.imgSize[model as keyof typeof settings.imgSize] as any
   })
 
   //   const img_urls = imgs.data.map((img: any) => img.b64_json)
