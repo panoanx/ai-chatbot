@@ -101,7 +101,8 @@ export function ChatMessage({
                 height="0"
                 sizes="100vw"
                 alt=""
-                className="h-auto w-auto rounded shadow"
+                className="h-auto w-auto rounded shadow-md shadow-black/30"
+                priority={true}
               />
             ))}
           </div>
@@ -162,6 +163,7 @@ export function ChatMessage({
                       sizes="100vw"
                       alt={alt || ''}
                       className="not-prose h-auto w-auto rounded shadow"
+                      priority={true}
                     />
                   </div>
                 )

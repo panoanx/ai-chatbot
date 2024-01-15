@@ -252,7 +252,7 @@ export function Settings({ className }: { className?: string }) {
               <Label className="flex flex-col space-y-1">
                 <span>Image Size</span>
                 <span className=" text-xs text-muted-foreground">
-                  Size of the generated image.
+                  Size of the generated image. Width x Height.
                 </span>
               </Label>
             </div>
@@ -261,13 +261,13 @@ export function Settings({ className }: { className?: string }) {
                 <span>DALL·E 2</span>
               </Label>
               <ImageSizeSelector
-                  defaultValue={imgSize['dall-e-2']}
-                  values={dalle2Sizes}
-                  onValueChange={(value: string) => {
-                    setSettingsWrapper({
-                      imgSize: {...imgSize, 'dall-e-2': value}
-                    })
-                  }}
+                defaultValue={imgSize['dall-e-2']}
+                values={dalle2Sizes}
+                onValueChange={(value: string) => {
+                  setSettingsWrapper({
+                    imgSize: { ...imgSize, 'dall-e-2': value }
+                  })
+                }}
               />
             </div>
             <div className="align-center flex items-center justify-between">
@@ -275,13 +275,13 @@ export function Settings({ className }: { className?: string }) {
                 <span>DALL·E 3</span>
               </Label>
               <ImageSizeSelector
-                  defaultValue={imgSize['dall-e-3']}
-                  values={dalle3Sizes}
-                  onValueChange={(value: string) => {
-                    setSettingsWrapper({
-                      imgSize: {...imgSize, 'dall-e-3': value}
-                    })
-                  }}
+                defaultValue={imgSize['dall-e-3']}
+                values={dalle3Sizes}
+                onValueChange={(value: string) => {
+                  setSettingsWrapper({
+                    imgSize: { ...imgSize, 'dall-e-3': value }
+                  })
+                }}
               />
             </div>
           </div>

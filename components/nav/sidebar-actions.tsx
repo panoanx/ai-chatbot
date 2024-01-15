@@ -200,8 +200,8 @@ export function SidebarActions({
                   }
 
                   setDeleteDialogOpen(false)
-                  router.refresh()
                   router.push('/')
+                  router.refresh()
                   toast.success('Chat deleted')
                 })
               }}

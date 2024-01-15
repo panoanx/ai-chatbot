@@ -72,7 +72,7 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
     },
     onFinish() {
       if (!path.includes('chat')) {
-        router.push(`/chat/${id}`, { shallow: true })
+        router.push(`/chat/${id}`, { shallow: true, scroll: false })
         router.refresh()
       }
     }
@@ -141,17 +141,17 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
       role: 'user'
     })
   }
-const isAtBottom = useAtBottom(128)
+  const isAtBottom = useAtBottom(128)
   useEffect(() => {
     if (isAtBottom && !isFirstRender) {
       // console.log(isAtBottom, promptFormHeight)
-      window.scrollTo({ top: document.body.offsetHeight, behavior: 'smooth' })
+      window.scrollTo({ top: document.body.offsetHeight, behavior: 'instant' })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [promptFormHeight])
 
   useEffect(() => {
-    if (isLoading && !isFirstRender) {
+    if (isLoading && !isFirstRender && isAtBottom) {
       window.scrollTo({ top: document.body.offsetHeight, behavior: 'instant' })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

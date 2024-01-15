@@ -58,6 +58,16 @@ export async function removeChat({ id, path }: { id: string; path: string }) {
   }
 
   try {
+    // images
+    const imageIds = await kv.smembers(`chat:${id}:images`)
+    const pipeline = kv.pipeline()
+    for (const imageId of imageIds) {
+      pipeline.del(`img:${imageId}`)
+    }
+    await pipeline.exec()
+    await kv.del(`chat:${id}:images`)
+
+    // chat
     await kv.del(`chat:${id}`)
     await kv.zrem(`user:chat:${session.user.id}`, `chat:${id}`)
   } catch (error) {
@@ -84,7 +94,21 @@ export async function clearChats() {
   const pipeline = kv.pipeline()
 
   for (const chat of chats) {
+    const chatId = chat.split(':').pop() // Assuming chat format is "chat:<id>"
+    if (!chatId) continue
+
+    // Delete all images associated with the chat
+    const imageIds = await kv.smembers(`chat:${chatId}:images`)
+    for (const imageId of imageIds) {
+      pipeline.del(`img:${imageId}`)
+    }
+    // Delete the image set for the chat
+    pipeline.del(`chat:${chatId}:images`)
+
+    // Delete the chat
     pipeline.del(chat)
+
+    // Remove the chat from the user's chat list
     pipeline.zrem(`user:chat:${session.user.id}`, chat)
   }
 

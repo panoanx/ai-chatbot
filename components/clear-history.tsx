@@ -60,6 +60,7 @@ export function ClearHistory({ clearChats }: ClearHistoryProps) {
 
                 setOpen(false)
                 router.push('/')
+                router.refresh()
               })
             }}
           >
