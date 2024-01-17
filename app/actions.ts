@@ -60,11 +60,13 @@ export async function removeChat({ id, path }: { id: string; path: string }) {
   try {
     // images
     const imageIds = await kv.smembers(`chat:${id}:images`)
-    const pipeline = kv.pipeline()
-    for (const imageId of imageIds) {
-      pipeline.del(`img:${imageId}`)
+    if (imageIds.length > 0) {
+      const pipeline = kv.pipeline()
+      for (const imageId of imageIds) {
+        pipeline.del(`img:${imageId}`)
+      }
+      await pipeline.exec()
     }
-    await pipeline.exec()
     await kv.del(`chat:${id}:images`)
 
     // chat
