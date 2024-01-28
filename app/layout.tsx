@@ -54,7 +54,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
       >
         <Toaster />
         <Providers attribute="class" defaultTheme="system" enableSystem>
-          <div className="flex min-h-screen flex-col bg-muted/20">
+          <div className="flex min-h-screen flex-col">
             {/* @ts-ignore */}
             <Header />
             <div className="flex flex-1 flex-row">

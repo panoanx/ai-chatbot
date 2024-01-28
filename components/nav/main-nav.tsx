@@ -19,7 +19,7 @@ export async function MainNav() {
           <div className="flex items-center justify-between p-4">
             <h4 className="text-sm font-medium">Chat History</h4>
           </div>
-          <div className="mb-2 px-2">
+          <div className="mb-4 px-2">
             <NewChatButton />
           </div>
           <div className="flex flex-1 flex-col overflow-hidden">

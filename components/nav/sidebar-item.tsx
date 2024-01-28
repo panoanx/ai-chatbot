@@ -46,7 +46,7 @@ export function SidebarItem({ chat, children }: SidebarItemProps) {
         className={cn(
           buttonVariants({ variant: 'ghost' }),
           'group h-8 w-full py-0 pl-8 pr-4 transition-colors hover:bg-zinc-200/40 dark:hover:bg-zinc-300/10',
-          isActive && 'bg-zinc-200 pr-16 font-semibold dark:bg-zinc-800'
+          isActive && 'bg-zinc-100 hover:bg-zinc-200 pr-16 font-semibold dark:bg-zinc-800'
         )}
         prefetch={true}
       >
