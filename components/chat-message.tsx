@@ -120,6 +120,7 @@ export function ChatMessage({
             isLoading={isLoading || false}
             initialImageUrls={message.image_urls || []}
             setIsVision={setIsCurrentVision}
+            withShadow={false}
           />
         ) : (
           <MemoizedReactMarkdown

@@ -32,6 +32,7 @@ export interface PromptProps
   initialImageUrls?: string[]
   setIsVision?: (isVision: boolean) => void
   setPromptFormHeight?: (height: number) => void
+  withShadow?: boolean
 }
 
 export function PromptForm({
@@ -41,7 +42,8 @@ export function PromptForm({
   isLoading,
   initialImageUrls,
   setIsVision,
-  setPromptFormHeight
+  setPromptFormHeight,
+  withShadow=true
 }: PromptProps) {
   const { formRef, onKeyDown } = useEnterSubmit()
   const inputRef = React.useRef<HTMLTextAreaElement>(null)
@@ -109,7 +111,13 @@ export function PromptForm({
       }}
       ref={formRef}
     >
-      <div className="relative flex max-h-96 w-full grow flex-row items-center overflow-hidden bg-background pl-10 pr-12 sm:rounded-3xl sm:shadow-[0_18px_60px_-10px_rgba(0,0,0,0.3)] sm:border sm:pl-12 sm:pr-16 ">
+      <div
+        className={cn(
+          'relative flex max-h-96 w-full z-50 grow flex-row items-center overflow-hidden bg-background pl-10 pr-12 sm:rounded-3xl sm:pl-12 sm:pr-16 sm:border ',
+          withShadow &&
+            'sm:shadow-[0_18px_60px_-10px_rgba(0,0,0,0.3)] '
+        )}
+      >
         <ImageUploader imageUrls={imageUrls} setImageUrls={setImageUrls} />
         <Textarea
           ref={inputRef}
@@ -134,9 +142,9 @@ export function PromptForm({
                 size="icon"
                 variant="ghost"
                 disabled={isLoading || input === ''}
-                className='rounded-full'
+                className="rounded-full"
               >
-                <Send className='pr-0.5 pt-0.5' />
+                <Send className="pr-0.5 pt-0.5" />
                 <span className="sr-only">Send message</span>
               </Button>
             </TooltipTrigger>
