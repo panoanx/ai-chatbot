@@ -13,7 +13,7 @@ export default function NewChatButton() {
   return (
     <Button
       variant="outline"
-      className=" h-10 w-full justify-start shadow px-4 py-2 font-medium transition-colors"
+      className=" h-10 w-full justify-start border shadow-none px-4 py-2 font-medium transition-colors"
       onClick={e => {
         e.preventDefault()
         router.push('/')

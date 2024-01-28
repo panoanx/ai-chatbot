@@ -124,7 +124,7 @@ export function ChatMessage({
           />
         ) : (
           <MemoizedReactMarkdown
-            className="prose  break-words dark:prose-invert prose-h5:font-medium prose-h6:font-medium prose-p:leading-relaxed"
+            className="prose break-words dark:prose-invert prose-h5:font-medium prose-h6:font-medium prose-p:leading-relaxed max-w-none"
             remarkPlugins={[remarkGfm, remarkMath]}
             rehypePlugins={[rehypeKatex as any]}
             components={{
