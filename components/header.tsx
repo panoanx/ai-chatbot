@@ -18,7 +18,7 @@ export async function Header() {
   const session = await auth()
 
   return (
-    <header className="supports-backdrop-blur:bg-background/20 fixed top-0 z-30 flex h-16 w-full shrink-0 items-center justify-between border-b bg-gradient-to-b from-background/70 to-background/40 px-4 backdrop-blur shadow-[inset_0px_-22px_50px_-30px_rgba(0,0,0,0.2)]">
+    <header className="supports-backdrop-blur:bg-background/20 fixed top-0 z-30 flex h-16 w-full shrink-0 items-center justify-between border-b bg-gradient-to-b from-background/70 to-background/40 px-4 backdrop-blur shadow-[inset_0px_-8px_20px_-10px_rgba(0,0,0,0.2)]">
       <div className="flex items-center">
         {session?.user ? (
           <>
