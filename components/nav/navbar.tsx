@@ -12,7 +12,7 @@ export default async function Navbar() {
     <>
       <React.Suspense fallback={<div className="flex-1 overflow-auto" />}>
         {/* @ts-ignore */}
-        <SidebarList userId={session?.user?.id} />
+        <SidebarList userId={session?.user?.id} radix={false} />
       </React.Suspense>
       <SidebarFooter>
         <ThemeToggle />
