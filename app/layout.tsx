@@ -54,11 +54,11 @@ export default async function RootLayout({ children }: RootLayoutProps) {
       >
         <Toaster />
         <Providers attribute="class" defaultTheme="system" enableSystem>
-          <div className="flex min-h-screen flex-col bg-muted">
+          <div className="flex min-h-screen flex-col bg-muted/20">
             {/* @ts-ignore */}
             <Header />
             <div className="flex flex-1 flex-row">
-              <main className="flex flex-1 flex-col bg-muted/50">
+              <main className="flex flex-1 flex-col">
                 <div className="relative flex h-full overflow-hidden">
                   {/* @ts-ignore */}
                   <MainNav />

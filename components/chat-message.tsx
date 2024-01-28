@@ -185,7 +185,13 @@ export function ChatMessage({
 
                 if (inline) {
                   return (
-                    <code className={cn(className, 'break-all')} {...props}>
+                    <code
+                      className={cn(
+                        className,
+                        'before:content-none after:content-none bg-muted rounded break-all'
+                      )}
+                      {...props}
+                    >
                       {children}
                     </code>
                   )

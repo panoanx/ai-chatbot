@@ -88,13 +88,15 @@ interface ModelSelectorProps {
   setModel: (value: string) => void
   disabled?: boolean
   modelTypes?: ModelGroupType[]
+  className?: string
 }
 
 export default function ModelSelector({
   model,
   setModel,
   disabled,
-  modelTypes
+  modelTypes,
+  className
 }: ModelSelectorProps) {
   const [open, setOpen] = React.useState(false)
 
@@ -135,7 +137,7 @@ export default function ModelSelector({
           role="combobox"
           aria-expanded={open}
           disabled={disabled}
-          className="inline-flex h-8 w-[170px] items-center bg-background font-medium shadow"
+          className={cn("inline-flex h-8 w-[170px] items-center bg-background font-medium shadow", className)}
         >
           <CubeIcon className="mr-2 h-4 w-4" />
           <span className="flex-1">{modelLabel}</span>

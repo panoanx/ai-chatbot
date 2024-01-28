@@ -13,7 +13,7 @@ import {
 import { useEnterSubmit } from '@/lib/hooks/use-enter-submit'
 import { cn } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
-import { Settings, Settings2 } from 'lucide-react'
+import { Send, SendHorizonal, Settings, Settings2 } from 'lucide-react'
 import { GearIcon } from '@radix-ui/react-icons'
 import { ImageUploader } from './image-uploader'
 import Image from 'next/image'
@@ -109,7 +109,7 @@ export function PromptForm({
       }}
       ref={formRef}
     >
-      <div className="relative flex max-h-96 w-full grow flex-row items-center overflow-hidden bg-background pl-10 pr-12 sm:rounded-md sm:border sm:pl-12 sm:pr-16 ">
+      <div className="relative flex max-h-96 w-full grow flex-row items-center overflow-hidden bg-background pl-10 pr-12 sm:rounded-3xl sm:shadow-[0_18px_60px_-10px_rgba(0,0,0,0.3)] sm:border sm:pl-12 sm:pr-16 ">
         <ImageUploader imageUrls={imageUrls} setImageUrls={setImageUrls} />
         <Textarea
           ref={inputRef}
@@ -132,9 +132,11 @@ export function PromptForm({
               <Button
                 type="submit"
                 size="icon"
+                variant="ghost"
                 disabled={isLoading || input === ''}
+                className='rounded-full'
               >
-                <IconArrowElbow />
+                <Send className='pr-0.5 pt-0.5' />
                 <span className="sr-only">Send message</span>
               </Button>
             </TooltipTrigger>
