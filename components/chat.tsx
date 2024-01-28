@@ -160,7 +160,7 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
   return (
     <>
       <div
-        className={cn('flex-1  pt-4 md:pt-10', className)}
+        className={cn('flex-1 pt-28', className)}
         style={{ paddingBottom: `${promptFormHeight + 80}px` }}
       >
         <div>

@@ -90,7 +90,7 @@ export function ChatPanel({
             </>
           )}
         </div>
-        <div className="space-y-4 px-4 pb-0 md:pb-6">
+        <div className="space-y-4 px-4 pt-2 pb-0 md:pb-6">
           <PromptForm
             onSubmit={async ({ text, image_urls }) => {
               await append({
