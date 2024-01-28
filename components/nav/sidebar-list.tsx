@@ -12,7 +12,7 @@ export async function SidebarList({ userId }: SidebarListProps) {
 
   return (
     <div className="flex-1 h-full">
-      <ScrollArea className="h-full">
+      <ScrollArea className="h-full w-full">
         {chats?.length ? (
           <div className="space-y-2 px-2">
             {chats.map(
