@@ -115,7 +115,7 @@ export function PromptForm({
         className={cn(
           'relative flex max-h-96 w-full z-50 grow flex-row items-center overflow-hidden bg-background pl-10 pr-12 sm:rounded-[30px] sm:pl-12 sm:pr-16 sm:border ',
           withShadow &&
-            'sm:shadow-[0_18px_60px_-10px_rgba(0,0,0,0.3)] '
+            'sm:shadow-[0_25px_60px_-10px_rgba(0,0,0,0.3)] '
         )}
       >
         <ImageUploader imageUrls={imageUrls} setImageUrls={setImageUrls} />
