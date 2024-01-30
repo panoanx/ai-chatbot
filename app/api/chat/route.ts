@@ -48,7 +48,12 @@ export async function POST(req: Request) {
   if (model.includes('dall')) {
     return await imageGenerator(userId, json, model, settings)
   }
-  const { temperature, topP: top_p, jsonMode } = settings as SettingsOptions
+  const {
+    temperature,
+    topP: top_p,
+    jsonMode,
+    forgetful
+  } = settings as SettingsOptions
 
   const createParams: OpenAI.Chat.Completions.ChatCompletionCreateParams = {
     stream: true,
@@ -103,6 +108,11 @@ export async function POST(req: Request) {
   }
 
   if (previewToken) openai.apiKey = previewToken
+
+  if (forgetful) {
+    // keep only the last
+    createParams.messages = [createParams.messages.pop()!]
+  }
 
   // TODO: remove this
   // if  '1106' in model

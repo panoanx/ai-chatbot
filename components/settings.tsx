@@ -31,6 +31,7 @@ export interface SettingsOptions {
     'dall-e-3': string
   }
   imgNum: 1 | 2 | 3 | 4
+  forgetful: boolean
 }
 
 interface SettingsContextProps {
@@ -48,7 +49,8 @@ const defaultSettings: SettingsOptions = {
     'dall-e-2': dalle2Sizes[0],
     'dall-e-3': dalle3Sizes[0]
   },
-  imgNum: 1
+  imgNum: 1,
+  forgetful: false
 }
 
 export const SettingsContext = React.createContext<SettingsContextProps>({
@@ -168,8 +170,15 @@ function SliderSetting({
 
 export function Settings({ className }: { className?: string }) {
   const { settings, setSettingsWrapper } = React.useContext(SettingsContext)
-  const { temperature, topP, jsonMode, defaultModel, imgSize, imgNum } =
-    settings
+  const {
+    temperature,
+    topP,
+    jsonMode,
+    defaultModel,
+    imgSize,
+    imgNum,
+    forgetful
+  } = settings
 
   return (
     <Popover>
@@ -241,6 +250,15 @@ export function Settings({ className }: { className?: string }) {
               }
               label="Json Mode"
               description="Ensure output is valid JSON. Works only with turbo models."
+            />
+            <SwitchSetting
+              key="forgetful"
+              value={forgetful}
+              onCheckedChange={() =>
+                setSettingsWrapper({ forgetful: !forgetful })
+              }
+              label="Forgetful (健忘症)"
+              description="Send only the last message to the server. Turn on to save token usage."
             />
           </div>
           <div className="space-y-2">
