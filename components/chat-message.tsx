@@ -61,7 +61,7 @@ export function ChatMessage({
     try {
       return content
         .replace(/\\\((.*?)\\\)/g, '$$ $1 $$')
-        .replace(/\\\[(.*?)\\\]/g, '\n$$$$ \n $1 \n $$$$\n')
+        .replace(/\\\[([\s\S]*)\\]/g, '$$$$$1$$$$')
     } catch (error) {
       console.log('error in replaceLogic', error)
       return content
