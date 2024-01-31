@@ -21,6 +21,7 @@ import toast from 'react-hot-toast'
 import assert from 'assert'
 import { set } from 'react-hook-form'
 import { convertFileToBase64 } from '@/lib/file'
+import { FileImage } from 'lucide-react'
 
 const isValidUrl = (urlString: string) => {
   try {
@@ -155,13 +156,13 @@ export function ImageUploader({
     <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
       <PopoverTrigger asChild>
         <Button
-          size="sm"
-          variant="outline"
+          size="icon"
+          variant="ghost"
           className={cn(
             'absolute left-0 top-4 h-8 w-8 rounded-full bg-background p-0 sm:left-4'
           )}
         >
-          <ImageIcon />
+          <FileImage className="pr-0.5 pb-0.5 stroke-gray-700 dark:stroke-gray-300" />
         </Button>
       </PopoverTrigger>
       <PopoverContent side="top">

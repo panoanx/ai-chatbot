@@ -74,7 +74,7 @@ module.exports = {
       },
       fontFamily: {
         sans: ['Inter', 'Noto Sans SC', ...defaultTheme.fontFamily.sans],
-        mono: ['var(--font-mono)']
+        mono: ['Jetbrains Mono', ...defaultTheme.fontFamily.mono]
       }
     }
   },

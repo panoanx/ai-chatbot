@@ -4,7 +4,7 @@ import * as React from 'react'
 import Textarea from 'react-textarea-autosize'
 
 import { Button, buttonVariants } from '@/components/ui/button'
-import { IconArrowElbow, IconClose, IconPlus } from '@/components/ui/icons'
+import { IconClose } from '@/components/ui/icons'
 import {
   Tooltip,
   TooltipContent,
@@ -12,12 +12,10 @@ import {
 } from '@/components/ui/tooltip'
 import { useEnterSubmit } from '@/lib/hooks/use-enter-submit'
 import { cn } from '@/lib/utils'
-import { useRouter } from 'next/navigation'
-import { Send, SendHorizonal, Settings, Settings2 } from 'lucide-react'
-import { GearIcon } from '@radix-ui/react-icons'
+import { BadgeDollarSign, Send } from 'lucide-react'
 import { ImageUploader } from './image-uploader'
 import Image from 'next/image'
-import { useAtBottom } from '@/lib/hooks/use-at-bottom'
+import { SettingsContext } from './settings'
 
 export interface PromptProps
   extends Pick<UseChatHelpers, 'input' | 'setInput'> {
@@ -43,8 +41,12 @@ export function PromptForm({
   initialImageUrls,
   setIsVision,
   setPromptFormHeight,
-  withShadow=true
+  withShadow = true
 }: PromptProps) {
+  const {
+    settings: { forgetful },
+    setSettingsWrapper
+  } = React.useContext(SettingsContext)
   const { formRef, onKeyDown } = useEnterSubmit()
   const inputRef = React.useRef<HTMLTextAreaElement>(null)
   const [imageUrls, _setImageUrls] = React.useState<string[]>(
@@ -113,9 +115,8 @@ export function PromptForm({
     >
       <div
         className={cn(
-          'relative flex max-h-96 w-full z-50 grow flex-row items-center overflow-hidden bg-background pl-10 pr-12 sm:rounded-[30px] sm:pl-12 sm:pr-16 sm:border ',
-          withShadow &&
-            'sm:shadow-[0_25px_60px_-10px_rgba(0,0,0,0.3)] '
+          'relative flex max-h-96 w-full z-50 grow flex-row items-center overflow-hidden bg-background pl-10 sm:rounded-[30px] sm:pl-12 sm:border ',
+          withShadow && 'sm:shadow-[0_25px_60px_-10px_rgba(0,0,0,0.15)] '
         )}
       >
         <ImageUploader imageUrls={imageUrls} setImageUrls={setImageUrls} />
@@ -132,9 +133,28 @@ export function PromptForm({
           placeholder="Send a message, or paste a image."
           spellCheck={false}
           onPaste={handlePaste}
-          className="max-h-60 min-h-[60px] w-full resize-none bg-transparent px-2 py-[1.3rem] focus-within:outline-none sm:text-sm"
+          className="max-h-72 min-h-[60px] w-full resize-none bg-transparent px-2 py-3 sm:py-[1.3rem] pr-8 focus-within:outline-none sm:text-sm sm:pr-[90px]"
         />
         <div className="absolute right-0 top-3 sm:right-4">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                size="icon"
+                variant="ghost"
+                className={cn(
+                  'rounded-full hidden sm:inline-flex',
+                  !forgetful && 'opacity-50'
+                )}
+                onClick={() => {
+                  setSettingsWrapper({ forgetful: !forgetful })
+                }}
+              >
+                <BadgeDollarSign className="pr-0.5 pt-0.5" />
+                <span className="sr-only">Forgetful Mode</span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Forgetful Mode</TooltipContent>
+          </Tooltip>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button

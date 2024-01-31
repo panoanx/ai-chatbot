@@ -189,7 +189,7 @@ export function ChatMessage({
                     <code
                       className={cn(
                         className,
-                        'before:content-none after:content-none px-1.5 py-0.5 bg-muted-foreground/10 rounded-md break-all'
+                        'before:content-none after:content-none px-1.5 py-0.5 bg-slate-200/30 font-normal rounded break-all'
                       )}
                       {...props}
                     >

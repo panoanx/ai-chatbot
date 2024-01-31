@@ -140,6 +140,9 @@ const customSyntaxHighlighter = (
         fontFamily: 'var(--font-mono)'
       }
     }}
+    lineNumberStyle={{
+      minWidth: '2.25em'
+    }}
   >
     {value}
   </SyntaxHighlighter>
@@ -182,8 +185,8 @@ const CodeBlock: FC<Props> = memo(({ language, value }) => {
   }
 
   return (
-    <div className="codeblock relative w-full rounded-md bg-muted-foreground/10 font-sans">
-      <div className="flex w-full h-8 items-center bg-muted-foreground/20 justify-between rounded-t-md px-6 py-0 pr-4 ">
+    <div className="codeblock relative w-full font-sans">
+      <div className="flex w-full h-7 items-center  justify-between px-4 py-0 pr-4 ">
         <span className="text-xs font-medium lowercase ">{language}</span>
         <div className="flex items-center space-x-1">
           <Button
@@ -206,7 +209,7 @@ const CodeBlock: FC<Props> = memo(({ language, value }) => {
           </Button>
         </div>
       </div>
-      <div className="block dark:hidden">
+      <div className="block bg-slate-200/30 rounded-lg dark:hidden py-3">
         {customSyntaxHighlighter(
           language,
           value,
