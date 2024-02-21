@@ -26,6 +26,7 @@ import {
   PopoverTrigger
 } from '@/components/ui/popover'
 import { SettingsContext } from './settings'
+import { ComponentIcon } from 'lucide-react'
 
 interface groupOptions {
   desc: string
@@ -36,9 +37,9 @@ export const modelOptions: Record<string, groupOptions> = {
   chat: {
     desc: 'Chat',
     models: [
-      { label: 'GPT-3.5 16k', value: 'gpt-3.5-turbo-16k', hint: 'Turbo' },
+      { label: 'GPT-3.5', value: 'gpt-3.5-turbo-0125', hint: 'Turbo' },
       { label: 'GPT-4', value: 'gpt-4', hint: 'Legacy' },
-      { label: 'GPT-4 128K', value: 'gpt-4-1106-preview', hint: 'Turbo' }
+      { label: 'GPT-4 Turbo', value: 'gpt-4-turbo-preview', hint: 'Turbo' }
     ]
   },
   vision: {
@@ -137,7 +138,10 @@ export default function ModelSelector({
           role="combobox"
           aria-expanded={open}
           disabled={disabled}
-          className={cn("inline-flex h-8 w-[170px] items-center bg-background font-medium shadow", className)}
+          className={cn(
+            'inline-flex h-8 w-[180px] items-center bg-background font-medium shadow',
+            className
+          )}
         >
           <CubeIcon className="mr-2 h-4 w-4" />
           <span className="flex-1">{modelLabel}</span>
@@ -162,13 +166,16 @@ export default function ModelSelector({
                     }
                   }}
                 >
-                  {option.label}
-                  <CommandDescription>
-                    {option.hint ? option.hint : null}
-                  </CommandDescription>
+                  <div className="flex flex-col w-full">
+                    <div className="inline-flex">{option.label}</div>
+                    <div className="inline-flex items-center text-muted-foreground font-mono text-xs">
+                      {/* <ComponentIcon className="w-3 h-3" /> */}
+                      {option.value}
+                    </div>
+                  </div>
                   <IconCheck
                     className={cn(
-                      'ml-2 h-4 w-4',
+                      'ml-2 h-5 w-5',
                       model !== option.value && 'hidden'
                     )}
                   />
