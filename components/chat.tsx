@@ -16,7 +16,7 @@ import {
   DialogHeader,
   DialogTitle
 } from '@/components/ui/dialog'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { toast } from 'react-hot-toast'
@@ -26,6 +26,7 @@ import { ChatRequestOptions } from 'ai'
 import { SettingsContext } from './settings'
 import { useAtBottom } from '@/lib/hooks/use-at-bottom'
 import { ModelGroupType, modelOptions } from './model-selector'
+import { useIsScrolling } from 'react-use-is-scrolling'
 
 const IS_PREVIEW = process.env.VERCEL_ENV === 'preview'
 
@@ -150,8 +151,9 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [promptFormHeight])
 
+  const { isScrollingY } = useIsScrolling()
   useEffect(() => {
-    if (isLoading && !isFirstRender && isAtBottom) {
+    if (isLoading && !isFirstRender && isAtBottom && !isScrollingY) {
       window.scrollTo({ top: document.body.offsetHeight, behavior: 'instant' })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
