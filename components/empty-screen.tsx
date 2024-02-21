@@ -22,7 +22,7 @@ const exampleMessages = [
 export function EmptyScreen({ setInput }: Pick<UseChatHelpers, 'setInput'>) {
   return (
     <div className="mx-auto max-w-3xl px-4">
-      <div className="rounded-xl shadow-md border bg-background p-8">
+      <div className="rounded-lg shadow border bg-background p-8">
         <h1 className="mb-2 text-lg font-semibold">
           Welcome to Robotflow AI Chatbot!
         </h1>

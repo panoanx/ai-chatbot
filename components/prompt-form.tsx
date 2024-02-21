@@ -139,6 +139,7 @@ export function PromptForm({
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
+                type="button"
                 size="icon"
                 variant="ghost"
                 className={cn(
