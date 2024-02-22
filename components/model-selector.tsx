@@ -39,7 +39,7 @@ export const modelOptions: Record<string, groupOptions> = {
     models: [
       { label: 'GPT-3.5', value: 'gpt-3.5-turbo-0125', hint: 'Turbo' },
       { label: 'GPT-4', value: 'gpt-4', hint: 'Legacy' },
-      { label: 'GPT-4 Turbo', value: 'gpt-4-turbo-preview', hint: 'Turbo' }
+      { label: 'GPT-4 Turbo', value: 'gpt-4-0125-preview', hint: 'Turbo' }
     ]
   },
   vision: {
